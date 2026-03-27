@@ -9,7 +9,7 @@ O **Rede Alerta** é uma plataforma de utilidade pública criada para ajudar na 
 
 ## 🌐 Acesse o projeto
 
-👉 https://redealerta.ong.br
+👉 https://www.redealerta.ong.br
 
 ---
 
