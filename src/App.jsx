@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import RedeAlertaHomepage from "./pages/RedeAlertaHomepage";
 import CreateCasePage from "./pages/CreateCasePage";
 import AdminLoginPage from "./pages/AdminLoginPage";
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/caso/:id" element={<CaseDetailPage />} />
         <Route path="/admin/informacoes" element={<AdminTipsPage />} />
       </Routes>
+      <Analytics />
     </BrowserRouter>
   );
 }
