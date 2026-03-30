@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
       });
 
       localStorage.setItem("admin_token", response.data.access_token);
-      navigate("/admin");
+      navigate("/colaborador");
     } catch (error) {
       alert("Login inválido");
       console.error(error);

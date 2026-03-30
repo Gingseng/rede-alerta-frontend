@@ -12,10 +12,14 @@ export default function App() {
       <Routes>
         <Route path="/" element={<RedeAlertaHomepage />} />
         <Route path="/cadastrar" element={<CreateCasePage />} />
-        <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
+
+        {/* 🔒 ROTAS INTERNAS */}
+        <Route path="/colaborador" element={<AdminDashboardPage />} />
+        <Route path="/colaborador/login" element={<AdminLoginPage />} />
+        <Route path="/colaborador/informacoes" element={<AdminTipsPage />} />
+
+        {/* 🌐 PÚBLICO */}
         <Route path="/caso/:id" element={<CaseDetailPage />} />
-        <Route path="/admin/informacoes" element={<AdminTipsPage />} />
       </Routes>
     </BrowserRouter>
   );
