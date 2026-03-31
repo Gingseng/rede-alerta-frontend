@@ -21,6 +21,16 @@ export default function RedeAlertaHomepage() {
     loadCases();
   }, []);
 
+  useEffect(() => {
+    try {
+      if (window.adsbygoogle) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (error) {
+      console.error("Erro ao inicializar AdSense:", error);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/85 backdrop-blur">
@@ -36,8 +46,6 @@ export default function RedeAlertaHomepage() {
           </div>
 
           <div className="flex items-center gap-2">
-            
-
             <Link
               to="/cadastrar"
               className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold shadow-lg shadow-red-700/30 transition hover:bg-red-500"
@@ -88,25 +96,25 @@ export default function RedeAlertaHomepage() {
               </div>
 
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                    {[
-                       ["24h", "atenção para casos urgentes"],
-                       ["Gratuito", "cadastro aberto à população"],
-                       ["Em crescimento", "plataforma em expansão"],
-                       ["Colaboração", "rede aberta à comunidade"],
-              ].map(([value, label]) => (
-              <div
-                 key={value}
-                 className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-white/10 bg-white/5 p-4"
-                >
-                <div className="text-[1.75rem] font-black leading-[1.05] tracking-tight text-white break-words">
-                  {value}
-                </div>
-                <div className="mt-3 text-xs leading-6 text-zinc-400">
-        {label}
-      </div>
-    </div>
-  ))}
-</div>
+                {[
+                  ["24h", "atenção para casos urgentes"],
+                  ["Gratuito", "cadastro aberto à população"],
+                  ["Em crescimento", "plataforma em expansão"],
+                  ["Colaboração", "rede aberta à comunidade"],
+                ].map(([value, label]) => (
+                  <div
+                    key={value}
+                    className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-white/10 bg-white/5 p-4"
+                  >
+                    <div className="text-[1.75rem] font-black leading-[1.05] tracking-tight text-white break-words">
+                      {value}
+                    </div>
+                    <div className="mt-3 text-xs leading-6 text-zinc-400">
+                      {label}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="relative z-10">
@@ -394,6 +402,21 @@ export default function RedeAlertaHomepage() {
               fortalecer a mobilização social e oferecer mais visibilidade a quem precisa ser encontrado.
             </p>
           </div>
+        </div>
+
+        <div className="mt-8 border-t border-white/10 pt-6">
+          <div className="mb-3 text-center text-xs uppercase tracking-[0.18em] text-zinc-500">
+            Publicidade
+          </div>
+
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-8005370036073215"
+            data-ad-slot="SEU_AD_SLOT_AQUI"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
         </div>
       </footer>
     </div>
