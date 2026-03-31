@@ -409,10 +409,8 @@ export default function RedeAlertaHomepage() {
           <div className="mb-3 text-center text-xs uppercase tracking-[0.18em] text-zinc-500">
             Publicidade
           </div>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8005370036073215"
-              crossorigin="anonymous"></script>
-         
-        
+
+          
         </div>
       </footer>
     </div>
