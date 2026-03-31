@@ -35,8 +35,7 @@ export default function RedeAlertaHomepage() {
     <div className="min-h-screen bg-neutral-950 text-white">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/85 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8005370036073215"
-              crossorigin="anonymous"></script>
+          
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-red-600 shadow-lg shadow-red-700/30">
               <span className="text-xl font-black">!</span>
@@ -410,15 +409,10 @@ export default function RedeAlertaHomepage() {
           <div className="mb-3 text-center text-xs uppercase tracking-[0.18em] text-zinc-500">
             Publicidade
           </div>
-
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-8005370036073215"
-            data-ad-slot="SEU_AD_SLOT_AQUI"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8005370036073215"
+              crossorigin="anonymous"></script>
+         
+        
         </div>
       </footer>
     </div>
