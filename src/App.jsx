@@ -10,7 +10,8 @@ import PublicGuidePage from "./pages/PublicGuidePage";
 import AdminNewsPage from "./pages/AdminNewsPage";
 import AdminNewsEditorPage from "./pages/AdminNewsEditorPage";
 import NewsDetailPage from "./pages/NewsDetailPage";
-
+import RedeInformaPage from "./pages/RedeInformaPage";
+import NewsDetailPage from "./pages/NewsDetailPage";
 export default function App() {
   return (
     <BrowserRouter>
@@ -28,6 +29,8 @@ export default function App() {
         {/* 🌐 PÚBLICO */}
         <Route path="/caso/:id" element={<CaseDetailPage />} />
         <Route path="/guia" element={<PublicGuidePage />} />
+        <Route path="/informacoes/:slug" element={<NewsDetailPage />} />
+        <Route path="/informacoes" element={<RedeInformaPage />} />
         <Route path="/informacoes/:slug" element={<NewsDetailPage />} />
       </Routes>
       <Analytics />

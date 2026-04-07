@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 
 export default function RedeAlertaHomepage() {
   const [cases, setCases] = useState([]);
+  const [newsPosts, setNewsPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingNews, setLoadingNews] = useState(true);
 
   async function loadCases() {
     try {
       const response = await api.get("/cases/public");
-      setCases(response.data);
+      setCases(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Erro ao carregar casos:", error);
     } finally {
@@ -17,8 +19,21 @@ export default function RedeAlertaHomepage() {
     }
   }
 
+  async function loadNews() {
+    try {
+      const response = await api.get("/news/public");
+      const posts = Array.isArray(response.data) ? response.data : [];
+      setNewsPosts(posts.slice(0, 3));
+    } catch (error) {
+      console.error("Erro ao carregar notícias:", error);
+    } finally {
+      setLoadingNews(false);
+    }
+  }
+
   useEffect(() => {
     loadCases();
+    loadNews();
   }, []);
 
   useEffect(() => {
@@ -54,6 +69,13 @@ export default function RedeAlertaHomepage() {
             </Link>
 
             <Link
+              to="/informacoes"
+              className="hidden rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 sm:inline-flex"
+            >
+              Informações
+            </Link>
+
+            <Link
               to="/cadastrar"
               className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold shadow-lg shadow-red-700/30 transition hover:bg-red-500"
             >
@@ -67,7 +89,32 @@ export default function RedeAlertaHomepage() {
         <section className="relative overflow-hidden border-b border-white/10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(220,38,38,0.28),transparent_30%),radial-gradient(circle_at_top_right,rgba(220,38,38,0.14),transparent_25%),linear-gradient(to_bottom,rgba(127,29,29,0.20),transparent)]" />
 
-          <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-2 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+            <Link
+              to="/informacoes"
+              className="relative z-10 flex flex-col gap-3 rounded-[28px] border border-red-500/20 bg-gradient-to-r from-red-500/10 via-white/[0.03] to-red-500/10 p-5 transition hover:border-red-400/30 hover:bg-red-500/10 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
+                  Rede Informa
+                </p>
+                <h2 className="mt-2 text-xl font-black text-white sm:text-2xl">
+                  O Rede Alerta também tem uma área pública de informações,
+                  orientações e atualizações
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-7 text-zinc-300 sm:text-base">
+                  Acesse conteúdos sobre como agir em casos de desaparecimento,
+                  novidades do projeto e materiais úteis para a comunidade.
+                </p>
+              </div>
+
+              <div className="inline-flex w-full items-center justify-center rounded-2xl bg-red-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-red-700/30 transition hover:bg-red-500 sm:w-auto">
+                Acessar Rede Informa
+              </div>
+            </Link>
+          </div>
+
+          <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 md:py-16 lg:grid-cols-2 lg:px-8">
             <div className="relative z-10">
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
                 Plataforma de utilidade pública
@@ -102,19 +149,19 @@ export default function RedeAlertaHomepage() {
                   Saiba como agir
                 </Link>
 
-                <a
-                  href="#como-funciona"
+                <Link
+                  to="/informacoes"
                   className="rounded-2xl border border-white/15 px-6 py-3 text-center text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5"
                 >
-                  Entender como funciona
-                </a>
+                  Ver Rede Informa
+                </Link>
               </div>
 
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {[
                   ["24h", "atenção para casos urgentes"],
                   ["Gratuito", "cadastro aberto à população"],
-                  ["Em crescimento", "plataforma em expansão"],
+                  ["Conteúdo", "guia e informações públicas"],
                   ["Colaboração", "rede aberta à comunidade"],
                 ].map(([value, label]) => (
                   <div
@@ -162,16 +209,25 @@ export default function RedeAlertaHomepage() {
                         </p>
                         <p className="mt-2 text-xs leading-6 text-zinc-500">
                           Enquanto isso, você pode acessar nosso guia público e
-                          entender como agir nas primeiras horas de um
-                          desaparecimento.
+                          também acompanhar o Rede Informa com orientações e
+                          atualizações do projeto.
                         </p>
 
-                        <Link
-                          to="/guia"
-                          className="mt-4 inline-flex rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-500"
-                        >
-                          Acessar guia
-                        </Link>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          <Link
+                            to="/guia"
+                            className="inline-flex rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-500"
+                          >
+                            Acessar guia
+                          </Link>
+
+                          <Link
+                            to="/informacoes"
+                            className="inline-flex rounded-xl border border-white/15 px-4 py-2 text-xs font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5"
+                          >
+                            Ver informações
+                          </Link>
+                        </div>
                       </div>
                     )}
 
@@ -297,13 +353,104 @@ export default function RedeAlertaHomepage() {
                 </Link>
 
                 <Link
-                  to="/cadastrar"
+                  to="/informacoes"
                   className="w-full rounded-2xl border border-white/15 px-6 py-3 text-center text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 lg:w-auto"
                 >
-                  Cadastrar caso
+                  Ver Rede Informa
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="border-t border-white/10 bg-white/[0.02]">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
+                  Rede Informa
+                </p>
+                <h2 className="mt-2 text-3xl font-black text-white">
+                  Conteúdos recentes do Rede Alerta
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400 sm:text-base">
+                  Atualizações, orientações e conteúdos públicos para manter a
+                  comunidade informada e o projeto sempre ativo.
+                </p>
+              </div>
+
+              <Link
+                to="/informacoes"
+                className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5"
+              >
+                Ver todas
+              </Link>
+            </div>
+
+            {loadingNews ? (
+              <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-8 text-center text-zinc-400">
+                Carregando publicações...
+              </div>
+            ) : newsPosts.length === 0 ? (
+              <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-8 text-center">
+                <p className="text-lg font-semibold text-white">
+                  Ainda não há publicações disponíveis.
+                </p>
+                <p className="mt-2 text-sm text-zinc-400">
+                  Em breve, esta área contará com notícias, orientações e
+                  atualizações do projeto.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {newsPosts.map((post) => (
+                  <Link
+                    key={post.id}
+                    to={`/informacoes/${post.slug}`}
+                    className="group overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] transition hover:-translate-y-1 hover:border-red-500/20"
+                  >
+                    <div className="h-52 overflow-hidden bg-neutral-900">
+                      {post.cover_image_url ? (
+                        <img
+                          src={post.cover_image_url}
+                          alt={post.title}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(220,38,38,0.22),transparent_35%),linear-gradient(135deg,#171717,#0a0a0a)]" />
+                      )}
+                    </div>
+
+                    <div className="p-6">
+                      <div className="inline-flex rounded-full bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-red-300">
+                        {post.category || "Informações"}
+                      </div>
+
+                      <h3 className="mt-4 text-xl font-black text-white">
+                        {post.title}
+                      </h3>
+
+                      <p className="mt-3 text-sm leading-7 text-zinc-400">
+                        {post.summary ||
+                          "Leia mais sobre esta publicação do Rede Alerta."}
+                      </p>
+
+                      <div className="mt-4 text-xs text-zinc-500">
+                        {post.published_at
+                          ? new Date(post.published_at).toLocaleDateString(
+                              "pt-BR"
+                            )
+                          : "Sem data"}
+                      </div>
+
+                      <span className="mt-5 inline-flex text-sm font-semibold text-red-300 transition group-hover:text-red-200">
+                        Ler mais →
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -331,14 +478,22 @@ export default function RedeAlertaHomepage() {
               <p>Ainda não existem casos publicados.</p>
               <p className="mt-3 text-sm leading-6 text-zinc-500">
                 Enquanto a plataforma cresce, você pode acessar nosso guia
-                público e entender como agir em uma situação de desaparecimento.
+                público e acompanhar o Rede Informa para entender como agir em
+                uma situação de desaparecimento.
               </p>
-              <div className="mt-5">
+              <div className="mt-5 flex flex-wrap justify-center gap-3">
                 <Link
                   to="/guia"
                   className="inline-flex rounded-2xl bg-red-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-red-700/30 transition hover:bg-red-500"
                 >
                   Acessar guia público
+                </Link>
+
+                <Link
+                  to="/informacoes"
+                  className="inline-flex rounded-2xl border border-white/15 px-5 py-3 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5"
+                >
+                  Ver Rede Informa
                 </Link>
               </div>
             </div>
