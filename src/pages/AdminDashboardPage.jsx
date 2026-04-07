@@ -2,28 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toPng } from "html-to-image";
 import api from "../services/api";
-import { Link } from "react-router-dom";
 
 const menuItems = [
   { id: "overview", label: "Visão geral" },
   { id: "cases", label: "Casos" },
   { id: "instagram", label: "Postagens Instagram" },
-  <Link
-  to="/colaborador/noticias"
-  className="group rounded-[28px] border border-white/10 bg-white/[0.03] p-6 transition hover:-translate-y-1 hover:border-red-500/30"
->
-  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-lg font-black text-white shadow-lg shadow-red-700/30">
-    📰
-  </div>
-
-  <h3 className="mt-5 text-xl font-bold text-white">
-    Notícias
-  </h3>
-
-  <p className="mt-2 text-sm leading-6 text-zinc-400">
-    Gerencie conteúdos públicos, orientações e atualizações do projeto.
-  </p>
-</Link>
 ];
 
 const statusOptions = [
@@ -118,11 +101,8 @@ function getStatusLabel(status) {
 
 function getInstagramDotClass(instagramStatus) {
   if (!instagramStatus) return "bg-red-500";
-
   if (instagramStatus.ready) return "bg-green-500";
-
   if (instagramStatus.configured) return "bg-yellow-500";
-
   return "bg-red-500";
 }
 
@@ -759,6 +739,15 @@ export default function AdminDashboardPage() {
               })}
             </div>
 
+            <div className="mt-4">
+              <Link
+                to="/colaborador/noticias"
+                className="block w-full rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-left text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+              >
+                📰 Gerenciar notícias
+              </Link>
+            </div>
+
             <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
                 Fonte de dados
@@ -807,6 +796,13 @@ export default function AdminDashboardPage() {
                     className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold transition hover:bg-white/10"
                   >
                     Ver informações recebidas
+                  </Link>
+
+                  <Link
+                    to="/colaborador/noticias"
+                    className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-center text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                  >
+                    📰 Gerenciar notícias
                   </Link>
 
                   <button
@@ -877,6 +873,13 @@ export default function AdminDashboardPage() {
                     </button>
                   );
                 })}
+
+                <Link
+                  to="/colaborador/noticias"
+                  className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                >
+                  📰 Notícias
+                </Link>
               </div>
 
               <div className="grid gap-3 lg:grid-cols-[1fr_220px]">
@@ -997,6 +1000,13 @@ export default function AdminDashboardPage() {
                       >
                         Abrir gerador de posts
                       </button>
+
+                      <Link
+                        to="/colaborador/noticias"
+                        className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-center text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                      >
+                        Gerenciar notícias
+                      </Link>
                     </div>
                   </div>
 
