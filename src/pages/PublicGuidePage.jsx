@@ -1,12 +1,119 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+function SectionTitle({ eyebrow, title, description, light = false }) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      className="mx-auto mb-10 max-w-3xl"
+    >
+      <p
+        className={`text-xs font-semibold uppercase tracking-[0.22em] ${
+          light ? "text-red-200" : "text-red-300"
+        }`}
+      >
+        {eyebrow}
+      </p>
+
+      <h2
+        className={`mt-2 text-3xl font-black sm:text-4xl ${
+          light ? "text-white" : "text-white"
+        }`}
+      >
+        {title}
+      </h2>
+
+      {description && (
+        <p
+          className={`mt-4 text-sm leading-7 sm:text-base ${
+            light ? "text-zinc-300" : "text-zinc-400"
+          }`}
+        >
+          {description}
+        </p>
+      )}
+    </motion.div>
+  );
+}
+
+function InfoCard({ title, text, icon }) {
+  return (
+    <motion.article
+      variants={fadeUp}
+      className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-xl shadow-black/10 backdrop-blur"
+    >
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600/15 text-xl text-red-300 ring-1 ring-red-500/20">
+        {icon}
+      </div>
+      <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
+      <p className="mt-3 text-sm leading-7 text-zinc-400">{text}</p>
+    </motion.article>
+  );
+}
+
+function StepCard({ number, title, text }) {
+  return (
+    <motion.article
+      variants={fadeUp}
+      className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.02] p-6 transition hover:border-red-500/20"
+    >
+      <div className="absolute inset-0 opacity-0 transition group-hover:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(220,38,38,0.14),transparent_30%)]" />
+
+      <div className="relative z-10">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-600 text-lg font-black text-white shadow-lg shadow-red-700/30">
+          {number}
+        </div>
+
+        <h3 className="mt-5 text-xl font-bold text-white">{title}</h3>
+        <p className="mt-3 text-sm leading-7 text-zinc-400">{text}</p>
+      </div>
+    </motion.article>
+  );
+}
+
+function WarningCard({ title, text }) {
+  return (
+    <motion.article
+      variants={fadeUp}
+      className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6"
+    >
+      <div className="mb-4 inline-flex rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-300">
+        Atenção
+      </div>
+      <h3 className="text-lg font-bold text-white">{title}</h3>
+      <p className="mt-3 text-sm leading-7 text-zinc-400">{text}</p>
+    </motion.article>
+  );
+}
 
 export default function PublicGuidePage() {
   useEffect(() => {
     document.title = "Guia de Ação | Rede Alerta";
 
     const description =
-      "Saiba o que fazer nas primeiras horas após um desaparecimento. Veja orientações, documentos importantes e como agir com rapidez através da Rede Alerta.";
+      "Saiba o que fazer nas primeiras horas após um desaparecimento. Orientações, documentos importantes, divulgação responsável e apoio da Rede Alerta.";
 
     let metaDescription = document.querySelector('meta[name="description"]');
 
@@ -20,800 +127,333 @@ export default function PublicGuidePage() {
   }, []);
 
   return (
-    <div style={styles.page}>
-      <section style={styles.hero}>
-        <div style={styles.heroGlowOne} />
-        <div style={styles.heroGlowTwo} />
+    <div className="min-h-screen bg-neutral-950 text-white">
+      <section className="relative overflow-hidden border-b border-white/10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(220,38,38,0.28),transparent_30%),radial-gradient(circle_at_top_right,rgba(220,38,38,0.14),transparent_25%),linear-gradient(to_bottom,rgba(127,29,29,0.20),transparent)]" />
+        <div className="absolute -left-20 top-20 h-72 w-72 rounded-full bg-red-500/10 blur-3xl" />
+        <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-red-400/10 blur-3xl" />
 
-        <div style={styles.container}>
-          <div style={styles.heroContent}>
-            <span style={styles.badge}>Utilidade pública</span>
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="max-w-4xl"
+          >
+            <motion.div
+              variants={fadeUp}
+              className="mb-5 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-red-300"
+            >
+              Utilidade pública
+            </motion.div>
 
-            <h1 style={styles.heroTitle}>
+            <motion.h1
+              variants={fadeUp}
+              className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl"
+            >
               Saiba como agir nas primeiras horas de um desaparecimento
-            </h1>
+            </motion.h1>
 
-            <p style={styles.heroText}>
-              Informação certa, no momento certo, pode fazer diferença. Esta
-              página foi criada para orientar famílias, amigos e toda a
-              comunidade sobre os primeiros passos diante de um desaparecimento.
-            </p>
+            <motion.p
+              variants={fadeUp}
+              className="mt-5 max-w-3xl text-base leading-7 text-zinc-300 sm:text-lg"
+            >
+              Informação correta, organização e rapidez podem fazer diferença.
+              Esta página reúne orientações essenciais para famílias, amigos e
+              comunidade agirem com mais clareza diante de um desaparecimento.
+            </motion.p>
 
-            <div style={styles.heroButtons}>
-              <Link to="/cadastrar" style={styles.primaryButton}>
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap"
+            >
+              <Link
+                to="/cadastrar"
+                className="rounded-2xl bg-red-600 px-6 py-3 text-center text-sm font-semibold shadow-lg shadow-red-700/30 transition hover:bg-red-500"
+              >
                 Cadastrar caso
               </Link>
 
-              <a href="#primeiros-passos" style={styles.secondaryButton}>
+              <a
+                href="#primeiros-passos"
+                className="rounded-2xl border border-white/15 px-6 py-3 text-center text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5"
+              >
                 Ver orientações
               </a>
-            </div>
 
-            <div style={styles.heroMiniCards}>
-              <div style={styles.miniCard}>
-                <strong style={styles.miniCardStrong}>Ação rápida</strong>
-                <span style={styles.miniCardText}>
-                  Organize informações sem perder tempo.
-                </span>
-              </div>
+              <Link
+                to="/"
+                className="rounded-2xl border border-red-500/30 bg-red-500/10 px-6 py-3 text-center text-sm font-semibold text-red-200 transition hover:border-red-400/40 hover:bg-red-500/15"
+              >
+                Voltar ao início
+              </Link>
+            </motion.div>
 
-              <div style={styles.miniCard}>
-                <strong style={styles.miniCardStrong}>Divulgação correta</strong>
-                <span style={styles.miniCardText}>
-                  Compartilhe com clareza e responsabilidade.
-                </span>
-              </div>
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="mt-10 grid gap-4 sm:grid-cols-3"
+            >
+              <motion.div
+                variants={fadeUp}
+                className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5"
+              >
+                <p className="text-2xl font-black text-white">Organização</p>
+                <p className="mt-2 text-sm leading-6 text-zinc-400">
+                  Reúna informações úteis sem transformar o caso em confusão.
+                </p>
+              </motion.div>
 
-              <div style={styles.miniCard}>
-                <strong style={styles.miniCardStrong}>Rede de apoio</strong>
-                <span style={styles.miniCardText}>
-                  Prepare a comunidade antes de um caso acontecer.
-                </span>
-              </div>
-            </div>
-          </div>
+              <motion.div
+                variants={fadeUp}
+                className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5"
+              >
+                <p className="text-2xl font-black text-white">Clareza</p>
+                <p className="mt-2 text-sm leading-6 text-zinc-400">
+                  Uma divulgação objetiva ajuda mais do que muitas mensagens
+                  desencontradas.
+                </p>
+              </motion.div>
+
+              <motion.div
+                variants={fadeUp}
+                className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5"
+              >
+                <p className="text-2xl font-black text-white">Rapidez</p>
+                <p className="mt-2 text-sm leading-6 text-zinc-400">
+                  Quanto antes a mobilização começa, maiores podem ser as
+                  chances de alcance útil.
+                </p>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      <main style={styles.main}>
-        <section id="primeiros-passos" style={styles.section}>
-          <div style={styles.container}>
-            <div style={styles.sectionHeader}>
-              <span style={styles.sectionEyebrow}>Primeiros passos</span>
-              <h2 style={styles.sectionTitle}>
-                O que fazer logo no início
-              </h2>
-              <p style={styles.sectionDescription}>
-                Em situações assim, o mais importante é agir com calma, reunir
-                dados confiáveis e começar a mobilização com responsabilidade.
-              </p>
-            </div>
+      <main>
+        <section
+          id="primeiros-passos"
+          className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+        >
+          <SectionTitle
+            eyebrow="Primeiros passos"
+            title="O que fazer logo no início"
+            description="Em uma situação assim, agir com calma não significa agir devagar. O ideal é organizar as informações certas e começar a mobilização de forma responsável."
+          />
 
-            <div style={styles.stepsGrid}>
-              <article style={styles.stepCard}>
-                <div style={styles.stepNumber}>1</div>
-                <h3 style={styles.stepTitle}>Reúna as informações principais</h3>
-                <p style={styles.stepText}>
-                  Separe nome completo, idade, foto recente, roupas usadas pela
-                  última vez, características físicas e horário aproximado do
-                  último contato.
-                </p>
-              </article>
-
-              <article style={styles.stepCard}>
-                <div style={styles.stepNumber}>2</div>
-                <h3 style={styles.stepTitle}>Verifique lugares próximos</h3>
-                <p style={styles.stepText}>
-                  Procure em locais que a pessoa costuma frequentar, como casa
-                  de familiares, amigos, escola, trabalho, hospitais e
-                  vizinhança.
-                </p>
-              </article>
-
-              <article style={styles.stepCard}>
-                <div style={styles.stepNumber}>3</div>
-                <h3 style={styles.stepTitle}>Registre a ocorrência</h3>
-                <p style={styles.stepText}>
-                  Procure a autoridade policial e formalize o caso com o máximo
-                  de detalhes possível. Leve documentos e foto recente.
-                </p>
-              </article>
-
-              <article style={styles.stepCard}>
-                <div style={styles.stepNumber}>4</div>
-                <h3 style={styles.stepTitle}>Divulgue com clareza</h3>
-                <p style={styles.stepText}>
-                  Use informações corretas, um contato centralizado e uma imagem
-                  atual. Isso aumenta a utilidade da divulgação e evita ruídos.
-                </p>
-              </article>
-            </div>
-          </div>
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-5 md:grid-cols-2 xl:grid-cols-4"
+          >
+            <StepCard
+              number="1"
+              title="Reúna as informações principais"
+              text="Separe nome completo, idade, foto recente, roupas usadas pela última vez, horário aproximado do último contato e características físicas marcantes."
+            />
+            <StepCard
+              number="2"
+              title="Verifique locais próximos"
+              text="Procure em casa de familiares, amigos, hospitais, escola, trabalho, vizinhança e lugares que a pessoa costuma frequentar."
+            />
+            <StepCard
+              number="3"
+              title="Registre a ocorrência"
+              text="Busque a autoridade policial e formalize o desaparecimento com o máximo de detalhes possível, levando documentos e uma imagem atual."
+            />
+            <StepCard
+              number="4"
+              title="Divulgue com responsabilidade"
+              text="Compartilhe informações verificadas, objetivas e com um contato centralizado para evitar ruídos e aumentar a utilidade do alerta."
+            />
+          </motion.div>
         </section>
 
-        <section style={styles.highlightSection}>
-          <div style={styles.container}>
-            <div style={styles.highlightCard}>
-              <div style={styles.highlightLeft}>
-                <span style={styles.highlightTag}>Importante</span>
-                <h2 style={styles.highlightTitle}>
+        <section className="border-y border-white/10 bg-white/[0.02]">
+          <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUp}
+              className="grid gap-6 rounded-[32px] border border-white/10 bg-gradient-to-br from-white/[0.05] to-red-500/[0.05] p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+            >
+              <div>
+                <div className="inline-flex rounded-full bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
+                  Importante
+                </div>
+                <h2 className="mt-4 text-3xl font-black text-white sm:text-4xl">
                   Tempo importa. Organização também.
                 </h2>
               </div>
 
-              <div style={styles.highlightRight}>
-                <p style={styles.highlightText}>
-                  Muitas famílias travam por não saber por onde começar. O papel
-                  da Rede Alerta é justamente transformar angústia em ação
-                  organizada, com uma comunicação mais clara e acessível.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section style={styles.section}>
-          <div style={styles.container}>
-            <div style={styles.sectionHeader}>
-              <span style={styles.sectionEyebrow}>Informações essenciais</span>
-              <h2 style={styles.sectionTitle}>
-                O que separar para ajudar na busca
-              </h2>
-            </div>
-
-            <div style={styles.infoGrid}>
-              <article style={styles.infoCard}>
-                <h3 style={styles.infoTitle}>Foto recente e nítida</h3>
-                <p style={styles.infoText}>
-                  Prefira uma imagem atual, com boa iluminação e rosto visível.
-                </p>
-              </article>
-
-              <article style={styles.infoCard}>
-                <h3 style={styles.infoTitle}>Dados pessoais</h3>
-                <p style={styles.infoText}>
-                  Nome completo, idade, altura aproximada, sinais particulares e
-                  qualquer detalhe útil para identificação.
-                </p>
-              </article>
-
-              <article style={styles.infoCard}>
-                <h3 style={styles.infoTitle}>Último local visto</h3>
-                <p style={styles.infoText}>
-                  Informe bairro, cidade, horário estimado e circunstâncias do
-                  último contato.
-                </p>
-              </article>
-
-              <article style={styles.infoCard}>
-                <h3 style={styles.infoTitle}>Roupa e aparência</h3>
-                <p style={styles.infoText}>
-                  Diga como a pessoa estava vestida e se havia mochila, boné,
-                  tatuagem, cicatriz ou algum acessório específico.
-                </p>
-              </article>
-
-              <article style={styles.infoCard}>
-                <h3 style={styles.infoTitle}>Contato principal</h3>
-                <p style={styles.infoText}>
-                  Tenha um único número de telefone para concentrar as
-                  informações e evitar desencontro.
-                </p>
-              </article>
-
-              <article style={styles.infoCard}>
-                <h3 style={styles.infoTitle}>Descrição objetiva</h3>
-                <p style={styles.infoText}>
-                  Quanto mais clara for a descrição, mais útil será a
-                  mobilização das pessoas que receberem o alerta.
-                </p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section style={styles.sectionDark}>
-          <div style={styles.container}>
-            <div style={styles.sectionHeader}>
-              <span style={styles.sectionEyebrowDark}>Atenção</span>
-              <h2 style={styles.sectionTitleDark}>
-                Erros comuns que atrapalham a divulgação
-              </h2>
-              <p style={styles.sectionDescriptionDark}>
-                Evitar esses erros ajuda o caso a circular de forma mais clara e
-                mais confiável.
+              <p className="text-sm leading-7 text-zinc-300 sm:text-base">
+                Muita gente trava porque não sabe por onde começar. O papel da
+                Rede Alerta é transformar angústia em ação mais clara,
+                organizada e compartilhável.
               </p>
-            </div>
-
-            <div style={styles.warningGrid}>
-              <article style={styles.warningCard}>
-                <h3 style={styles.warningTitle}>Informação sem checagem</h3>
-                <p style={styles.warningText}>
-                  Boatos e detalhes errados confundem buscas e reduzem a
-                  credibilidade do alerta.
-                </p>
-              </article>
-
-              <article style={styles.warningCard}>
-                <h3 style={styles.warningTitle}>Foto antiga ou ruim</h3>
-                <p style={styles.warningText}>
-                  Imagens desatualizadas dificultam o reconhecimento no dia a
-                  dia.
-                </p>
-              </article>
-
-              <article style={styles.warningCard}>
-                <h3 style={styles.warningTitle}>Muitos contatos diferentes</h3>
-                <p style={styles.warningText}>
-                  Centralizar o recebimento das informações facilita a
-                  organização da família e da equipe de apoio.
-                </p>
-              </article>
-
-              <article style={styles.warningCard}>
-                <h3 style={styles.warningTitle}>Descrição confusa</h3>
-                <p style={styles.warningText}>
-                  Textos longos demais ou desorganizados fazem a mensagem perder
-                  força na hora do compartilhamento.
-                </p>
-              </article>
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        <section style={styles.section}>
-          <div style={styles.container}>
-            <div style={styles.sectionHeader}>
-              <span style={styles.sectionEyebrow}>Rede Alerta</span>
-              <h2 style={styles.sectionTitle}>Como a plataforma pode ajudar</h2>
-              <p style={styles.sectionDescription}>
-                Mesmo antes de um caso ser registrado, o site pode funcionar
-                como uma central de orientação, preparo e conscientização.
-              </p>
-            </div>
+        <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+          <SectionTitle
+            eyebrow="Informações essenciais"
+            title="O que separar para ajudar na busca"
+            description="Quanto mais útil e clara for a informação, melhor será a mobilização de quem receber o alerta."
+          />
 
-            <div style={styles.helpGrid}>
-              <article style={styles.helpCard}>
-                <div style={styles.helpIcon}>✓</div>
-                <h3 style={styles.helpTitle}>Cadastro simples</h3>
-                <p style={styles.helpText}>
-                  Um fluxo mais claro para reunir informações importantes e
-                  deixar o caso pronto para divulgação.
-                </p>
-              </article>
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+          >
+            <InfoCard
+              icon="📷"
+              title="Foto recente e nítida"
+              text="Prefira uma imagem atual, bem iluminada e com o rosto claramente visível."
+            />
+            <InfoCard
+              icon="🪪"
+              title="Dados pessoais"
+              text="Nome completo, idade, altura aproximada, sinais particulares e qualquer detalhe importante para identificação."
+            />
+            <InfoCard
+              icon="📍"
+              title="Último local visto"
+              text="Informe bairro, cidade, horário estimado e contexto do último contato."
+            />
+            <InfoCard
+              icon="👕"
+              title="Roupa e aparência"
+              text="Descreva como a pessoa estava vestida e se havia mochila, boné, tatuagem, cicatriz ou acessório específico."
+            />
+            <InfoCard
+              icon="📞"
+              title="Contato principal"
+              text="Use um único número para centralizar informações e evitar desencontro entre família e comunidade."
+            />
+            <InfoCard
+              icon="📝"
+              title="Descrição objetiva"
+              text="Textos claros e diretos ajudam muito mais do que mensagens confusas ou longas demais."
+            />
+          </motion.div>
+        </section>
 
-              <article style={styles.helpCard}>
-                <div style={styles.helpIcon}>✓</div>
-                <h3 style={styles.helpTitle}>Compartilhamento facilitado</h3>
-                <p style={styles.helpText}>
-                  Informações organizadas ajudam familiares, amigos e a
-                  comunidade a compartilhar melhor.
-                </p>
-              </article>
+        <section className="border-y border-white/10 bg-neutral-900/70">
+          <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <SectionTitle
+              eyebrow="Atenção"
+              title="Erros comuns que atrapalham a divulgação"
+              description="Evitar esses pontos já melhora muito a qualidade da mobilização."
+            />
 
-              <article style={styles.helpCard}>
-                <div style={styles.helpIcon}>✓</div>
-                <h3 style={styles.helpTitle}>Valor público contínuo</h3>
-                <p style={styles.helpText}>
-                  Mesmo sem casos ativos, a plataforma continua útil para
-                  orientar, informar e atrair visitantes.
-                </p>
-              </article>
-            </div>
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              className="grid gap-5 md:grid-cols-2 xl:grid-cols-4"
+            >
+              <WarningCard
+                title="Informação sem checagem"
+                text="Boatos e detalhes errados confundem buscas e prejudicam a credibilidade do alerta."
+              />
+              <WarningCard
+                title="Foto antiga ou ruim"
+                text="Imagem desatualizada ou de baixa qualidade dificulta reconhecimento."
+              />
+              <WarningCard
+                title="Muitos contatos diferentes"
+                text="Quando cada pessoa passa um número, a comunicação vira desencontro."
+              />
+              <WarningCard
+                title="Texto confuso"
+                text="Mensagens longas demais ou desorganizadas perdem força no compartilhamento."
+              />
+            </motion.div>
           </div>
         </section>
 
-        <section style={styles.ctaSection}>
-          <div style={styles.container}>
-            <div style={styles.ctaCard}>
-              <div style={styles.ctaContent}>
-                <span style={styles.ctaEyebrow}>Rede Alerta</span>
-                <h2 style={styles.ctaTitle}>
-                  Transforme o site em uma central pública de orientação
-                </h2>
-                <p style={styles.ctaText}>
-                  Esta página é o começo. Além de ajudar famílias e visitantes,
-                  ela também fortalece o tráfego orgânico e dá mais utilidade ao
-                  projeto mesmo quando não há casos publicados.
-                </p>
+        <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+          <SectionTitle
+            eyebrow="Rede Alerta"
+            title="Como a plataforma pode ajudar"
+            description="Mesmo sem casos ativos no momento, o site pode funcionar como uma central pública de orientação, preparo e conscientização."
+          />
 
-                <div style={styles.ctaButtons}>
-                  <Link to="/cadastrar" style={styles.primaryButton}>
-                    Cadastrar um caso
-                  </Link>
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-5 md:grid-cols-3"
+          >
+            <InfoCard
+              icon="✓"
+              title="Cadastro mais claro"
+              text="Um fluxo simples para reunir informações importantes e preparar uma divulgação mais útil."
+            />
+            <InfoCard
+              icon="↗"
+              title="Compartilhamento facilitado"
+              text="Organização ajuda familiares, amigos e comunidade a compartilhar melhor cada caso."
+            />
+            <InfoCard
+              icon="◎"
+              title="Valor público contínuo"
+              text="Mesmo quando não há casos publicados, o projeto continua servindo à população com orientação e informação."
+            />
+          </motion.div>
+        </section>
 
-                  <Link to="/" style={styles.ctaSecondaryButton}>
-                    Voltar para o início
-                  </Link>
-                </div>
-              </div>
+        <section className="mx-auto max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8 lg:pb-24">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+            className="rounded-[32px] border border-white/10 bg-gradient-to-br from-white/[0.06] to-red-500/[0.06] p-8 text-center"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
+              Próximo passo
+            </p>
+
+            <h2 className="mt-2 text-3xl font-black text-white sm:text-4xl">
+              O Rede Alerta também pode ser uma central de informação
+            </h2>
+
+            <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-zinc-400 sm:text-base">
+              Além do guia, a próxima etapa é reunir conteúdos, notícias,
+              atualizações e orientações em uma área pública do projeto para
+              manter o site ativo, útil e relevante.
+            </p>
+
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link
+                to="/cadastrar"
+                className="rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-700/30 transition hover:bg-red-500"
+              >
+                Cadastrar caso
+              </Link>
+
+              <Link
+                to="/"
+                className="rounded-2xl border border-white/15 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5"
+              >
+                Voltar para homepage
+              </Link>
             </div>
-          </div>
+          </motion.div>
         </section>
       </main>
     </div>
   );
 }
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    background:
-      "linear-gradient(180deg, #061019 0%, #08131d 35%, #0a141d 100%)",
-    color: "#ffffff",
-    fontFamily:
-      "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-  },
-
-  main: {
-    position: "relative",
-    zIndex: 1,
-  },
-
-  container: {
-    width: "100%",
-    maxWidth: "1180px",
-    margin: "0 auto",
-    padding: "0 20px",
-    boxSizing: "border-box",
-  },
-
-  hero: {
-    position: "relative",
-    overflow: "hidden",
-    padding: "96px 0 72px",
-    borderBottom: "1px solid rgba(255,255,255,0.06)",
-    background:
-      "linear-gradient(135deg, rgba(10,22,34,0.95) 0%, rgba(11,28,44,0.98) 50%, rgba(8,18,28,1) 100%)",
-  },
-
-  heroGlowOne: {
-    position: "absolute",
-    width: "420px",
-    height: "420px",
-    borderRadius: "999px",
-    background: "rgba(36, 143, 255, 0.18)",
-    filter: "blur(80px)",
-    top: "-80px",
-    right: "-100px",
-    pointerEvents: "none",
-  },
-
-  heroGlowTwo: {
-    position: "absolute",
-    width: "300px",
-    height: "300px",
-    borderRadius: "999px",
-    background: "rgba(111, 230, 255, 0.10)",
-    filter: "blur(70px)",
-    bottom: "-60px",
-    left: "-60px",
-    pointerEvents: "none",
-  },
-
-  heroContent: {
-    maxWidth: "900px",
-    position: "relative",
-    zIndex: 1,
-  },
-
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "8px",
-    padding: "8px 14px",
-    borderRadius: "999px",
-    background: "rgba(255,255,255,0.06)",
-    border: "1px solid rgba(255,255,255,0.09)",
-    color: "#cfe7ff",
-    fontSize: "13px",
-    fontWeight: 700,
-    letterSpacing: "0.03em",
-    marginBottom: "18px",
-  },
-
-  heroTitle: {
-    fontSize: "clamp(2.2rem, 5vw, 4rem)",
-    lineHeight: 1.06,
-    letterSpacing: "-0.03em",
-    margin: "0 0 18px",
-    maxWidth: "860px",
-  },
-
-  heroText: {
-    margin: "0 0 28px",
-    maxWidth: "760px",
-    fontSize: "1.08rem",
-    lineHeight: 1.8,
-    color: "#d4e2ee",
-  },
-
-  heroButtons: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "14px",
-    marginBottom: "30px",
-  },
-
-  primaryButton: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "14px 22px",
-    borderRadius: "14px",
-    background:
-      "linear-gradient(135deg, #2391ff 0%, #167dff 100%)",
-    color: "#ffffff",
-    textDecoration: "none",
-    fontWeight: 700,
-    fontSize: "0.98rem",
-    boxShadow: "0 14px 34px rgba(35, 145, 255, 0.25)",
-    border: "1px solid rgba(255,255,255,0.06)",
-  },
-
-  secondaryButton: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "14px 22px",
-    borderRadius: "14px",
-    background: "rgba(255,255,255,0.03)",
-    color: "#ffffff",
-    textDecoration: "none",
-    fontWeight: 700,
-    fontSize: "0.98rem",
-    border: "1px solid rgba(255,255,255,0.12)",
-    backdropFilter: "blur(8px)",
-  },
-
-  heroMiniCards: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "14px",
-    marginTop: "10px",
-  },
-
-  miniCard: {
-    padding: "18px",
-    borderRadius: "18px",
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.07)",
-    backdropFilter: "blur(10px)",
-  },
-
-  miniCardStrong: {
-    display: "block",
-    fontSize: "0.98rem",
-    marginBottom: "6px",
-  },
-
-  miniCardText: {
-    display: "block",
-    color: "#c7d7e5",
-    fontSize: "0.95rem",
-    lineHeight: 1.6,
-  },
-
-  section: {
-    padding: "80px 0 16px",
-  },
-
-  sectionDark: {
-    padding: "80px 0 22px",
-    background:
-      "linear-gradient(180deg, rgba(7,12,18,0.95) 0%, rgba(10,12,16,1) 100%)",
-    borderTop: "1px solid rgba(255,255,255,0.04)",
-    borderBottom: "1px solid rgba(255,255,255,0.04)",
-    marginTop: "34px",
-  },
-
-  sectionHeader: {
-    marginBottom: "28px",
-    maxWidth: "760px",
-  },
-
-  sectionEyebrow: {
-    display: "inline-block",
-    color: "#84c5ff",
-    fontWeight: 700,
-    fontSize: "0.82rem",
-    textTransform: "uppercase",
-    letterSpacing: "0.08em",
-    marginBottom: "10px",
-  },
-
-  sectionEyebrowDark: {
-    display: "inline-block",
-    color: "#ffc98a",
-    fontWeight: 700,
-    fontSize: "0.82rem",
-    textTransform: "uppercase",
-    letterSpacing: "0.08em",
-    marginBottom: "10px",
-  },
-
-  sectionTitle: {
-    fontSize: "clamp(1.7rem, 3vw, 2.5rem)",
-    lineHeight: 1.15,
-    letterSpacing: "-0.02em",
-    margin: "0 0 12px",
-    color: "#ffffff",
-  },
-
-  sectionTitleDark: {
-    fontSize: "clamp(1.7rem, 3vw, 2.5rem)",
-    lineHeight: 1.15,
-    letterSpacing: "-0.02em",
-    margin: "0 0 12px",
-    color: "#ffffff",
-  },
-
-  sectionDescription: {
-    color: "#bfd0de",
-    fontSize: "1rem",
-    lineHeight: 1.8,
-    margin: 0,
-  },
-
-  sectionDescriptionDark: {
-    color: "#d4d8dd",
-    fontSize: "1rem",
-    lineHeight: 1.8,
-    margin: 0,
-  },
-
-  stepsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "18px",
-  },
-
-  stepCard: {
-    background:
-      "linear-gradient(180deg, rgba(15,28,39,1) 0%, rgba(11,22,31,1) 100%)",
-    borderRadius: "22px",
-    padding: "24px",
-    border: "1px solid rgba(255,255,255,0.06)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
-  },
-
-  stepNumber: {
-    width: "42px",
-    height: "42px",
-    borderRadius: "12px",
-    background:
-      "linear-gradient(135deg, #2391ff 0%, #47b0ff 100%)",
-    color: "#fff",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: 800,
-    marginBottom: "16px",
-    boxShadow: "0 10px 22px rgba(35, 145, 255, 0.18)",
-  },
-
-  stepTitle: {
-    fontSize: "1.05rem",
-    lineHeight: 1.35,
-    margin: "0 0 10px",
-  },
-
-  stepText: {
-    margin: 0,
-    color: "#c9d7e2",
-    lineHeight: 1.75,
-    fontSize: "0.97rem",
-  },
-
-  highlightSection: {
-    padding: "36px 0 0",
-  },
-
-  highlightCard: {
-    display: "grid",
-    gridTemplateColumns: "1.1fr 1fr",
-    gap: "24px",
-    padding: "30px",
-    borderRadius: "24px",
-    background:
-      "linear-gradient(135deg, #eaf7ff 0%, #f6fbff 48%, #ffffff 100%)",
-    color: "#08131d",
-    border: "1px solid rgba(255,255,255,0.55)",
-  },
-
-  highlightLeft: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-
-  highlightRight: {
-    display: "flex",
-    alignItems: "center",
-  },
-
-  highlightTag: {
-    display: "inline-block",
-    width: "fit-content",
-    padding: "7px 12px",
-    borderRadius: "999px",
-    background: "rgba(8,19,29,0.08)",
-    color: "#0b2840",
-    fontSize: "0.78rem",
-    fontWeight: 700,
-    textTransform: "uppercase",
-    letterSpacing: "0.08em",
-    marginBottom: "14px",
-  },
-
-  highlightTitle: {
-    margin: 0,
-    fontSize: "clamp(1.5rem, 2.8vw, 2.3rem)",
-    lineHeight: 1.15,
-    letterSpacing: "-0.02em",
-  },
-
-  highlightText: {
-    margin: 0,
-    color: "#314454",
-    fontSize: "1rem",
-    lineHeight: 1.8,
-  },
-
-  infoGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-    gap: "18px",
-  },
-
-  infoCard: {
-    padding: "22px",
-    borderRadius: "20px",
-    background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(255,255,255,0.07)",
-  },
-
-  infoTitle: {
-    margin: "0 0 10px",
-    fontSize: "1rem",
-    lineHeight: 1.35,
-  },
-
-  infoText: {
-    margin: 0,
-    color: "#c9d7e2",
-    lineHeight: 1.7,
-    fontSize: "0.96rem",
-  },
-
-  warningGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-    gap: "18px",
-  },
-
-  warningCard: {
-    padding: "22px",
-    borderRadius: "20px",
-    background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(255,255,255,0.07)",
-  },
-
-  warningTitle: {
-    margin: "0 0 10px",
-    color: "#ffcc8f",
-    fontSize: "1rem",
-    lineHeight: 1.35,
-  },
-
-  warningText: {
-    margin: 0,
-    color: "#dcd6cf",
-    lineHeight: 1.72,
-    fontSize: "0.96rem",
-  },
-
-  helpGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: "18px",
-  },
-
-  helpCard: {
-    padding: "24px",
-    borderRadius: "22px",
-    background:
-      "linear-gradient(180deg, rgba(15,28,39,1) 0%, rgba(11,22,31,1) 100%)",
-    border: "1px solid rgba(255,255,255,0.06)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.14)",
-  },
-
-  helpIcon: {
-    width: "36px",
-    height: "36px",
-    borderRadius: "10px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "rgba(35, 145, 255, 0.12)",
-    color: "#7cc1ff",
-    fontWeight: 800,
-    marginBottom: "14px",
-    border: "1px solid rgba(35,145,255,0.18)",
-  },
-
-  helpTitle: {
-    margin: "0 0 10px",
-    fontSize: "1.03rem",
-  },
-
-  helpText: {
-    margin: 0,
-    color: "#c8d6e1",
-    lineHeight: 1.75,
-    fontSize: "0.97rem",
-  },
-
-  ctaSection: {
-    padding: "84px 0 100px",
-  },
-
-  ctaCard: {
-    borderRadius: "28px",
-    overflow: "hidden",
-    background:
-      "linear-gradient(135deg, #ffffff 0%, #edf7ff 48%, #dbeeff 100%)",
-    boxShadow: "0 22px 50px rgba(0,0,0,0.18)",
-  },
-
-  ctaContent: {
-    padding: "40px",
-    color: "#08131d",
-  },
-
-  ctaEyebrow: {
-    display: "inline-block",
-    color: "#22649f",
-    fontWeight: 700,
-    fontSize: "0.82rem",
-    textTransform: "uppercase",
-    letterSpacing: "0.08em",
-    marginBottom: "12px",
-  },
-
-  ctaTitle: {
-    margin: "0 0 14px",
-    fontSize: "clamp(1.8rem, 3vw, 2.8rem)",
-    lineHeight: 1.12,
-    letterSpacing: "-0.02em",
-    maxWidth: "860px",
-  },
-
-  ctaText: {
-    margin: "0 0 24px",
-    color: "#3b4c5a",
-    lineHeight: 1.8,
-    fontSize: "1rem",
-    maxWidth: "820px",
-  },
-
-  ctaButtons: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "14px",
-  },
-
-  ctaSecondaryButton: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "14px 22px",
-    borderRadius: "14px",
-    background: "transparent",
-    color: "#08131d",
-    textDecoration: "none",
-    fontWeight: 700,
-    fontSize: "0.98rem",
-    border: "1px solid rgba(8,19,29,0.14)",
-  },
-};
