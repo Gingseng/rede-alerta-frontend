@@ -2,11 +2,28 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toPng } from "html-to-image";
 import api from "../services/api";
+import { Link } from "react-router-dom";
 
 const menuItems = [
   { id: "overview", label: "Visão geral" },
   { id: "cases", label: "Casos" },
   { id: "instagram", label: "Postagens Instagram" },
+  <Link
+  to="/colaborador/noticias"
+  className="group rounded-[28px] border border-white/10 bg-white/[0.03] p-6 transition hover:-translate-y-1 hover:border-red-500/30"
+>
+  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-lg font-black text-white shadow-lg shadow-red-700/30">
+    📰
+  </div>
+
+  <h3 className="mt-5 text-xl font-bold text-white">
+    Notícias
+  </h3>
+
+  <p className="mt-2 text-sm leading-6 text-zinc-400">
+    Gerencie conteúdos públicos, orientações e atualizações do projeto.
+  </p>
+</Link>
 ];
 
 const statusOptions = [
