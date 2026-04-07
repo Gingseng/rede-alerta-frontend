@@ -35,7 +35,6 @@ export default function RedeAlertaHomepage() {
     <div className="min-h-screen bg-neutral-950 text-white">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/85 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-red-600 shadow-lg shadow-red-700/30">
               <span className="text-xl font-black">!</span>
@@ -47,6 +46,13 @@ export default function RedeAlertaHomepage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Link
+              to="/guia"
+              className="hidden rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 sm:inline-flex"
+            >
+              Guia público
+            </Link>
+
             <Link
               to="/cadastrar"
               className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold shadow-lg shadow-red-700/30 transition hover:bg-red-500"
@@ -75,17 +81,25 @@ export default function RedeAlertaHomepage() {
               </h1>
 
               <p className="mt-5 max-w-2xl text-base leading-7 text-zinc-300 sm:text-lg">
-                O Rede Alerta foi criado para ajudar famílias, amigos e a comunidade
-                a divulgarem casos de desaparecimento com mais rapidez, clareza e responsabilidade.
-                Um espaço sério, humano e acessível para mobilizar informação quando ela mais importa.
+                O Rede Alerta foi criado para ajudar famílias, amigos e a
+                comunidade a divulgarem casos de desaparecimento com mais
+                rapidez, clareza e responsabilidade. Um espaço sério, humano e
+                acessível para mobilizar informação quando ela mais importa.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   to="/cadastrar"
                   className="rounded-2xl bg-red-600 px-6 py-3 text-center text-sm font-semibold shadow-lg shadow-red-700/30 transition hover:bg-red-500"
                 >
                   Cadastrar desaparecido
+                </Link>
+
+                <Link
+                  to="/guia"
+                  className="rounded-2xl border border-red-500/30 bg-red-500/10 px-6 py-3 text-center text-sm font-semibold text-red-200 transition hover:border-red-400/40 hover:bg-red-500/15"
+                >
+                  Saiba como agir
                 </Link>
 
                 <a
@@ -107,7 +121,7 @@ export default function RedeAlertaHomepage() {
                     key={value}
                     className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-white/10 bg-white/5 p-4"
                   >
-                    <div className="text-[1.75rem] font-black leading-[1.05] tracking-tight text-white break-words">
+                    <div className="break-words text-[1.75rem] font-black leading-[1.05] tracking-tight text-white">
                       {value}
                     </div>
                     <div className="mt-3 text-xs leading-6 text-zinc-400">
@@ -123,9 +137,12 @@ export default function RedeAlertaHomepage() {
                 <div className="rounded-[24px] border border-white/10 bg-neutral-900 p-4 sm:p-5">
                   <div className="mb-4 flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-white">Casos recentes</p>
+                      <p className="text-sm font-semibold text-white">
+                        Casos recentes
+                      </p>
                       <p className="text-xs text-zinc-400">
-                        Alertas públicos disponíveis para consulta e compartilhamento
+                        Alertas públicos disponíveis para consulta e
+                        compartilhamento
                       </p>
                     </div>
                     <span className="rounded-full bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-300">
@@ -134,7 +151,9 @@ export default function RedeAlertaHomepage() {
                   </div>
 
                   <div className="space-y-3">
-                    {loading && <p className="text-sm text-zinc-400">Carregando casos...</p>}
+                    {loading && (
+                      <p className="text-sm text-zinc-400">Carregando casos...</p>
+                    )}
 
                     {!loading && cases.length === 0 && (
                       <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
@@ -142,8 +161,17 @@ export default function RedeAlertaHomepage() {
                           Ainda não há casos publicados nesta área.
                         </p>
                         <p className="mt-2 text-xs leading-6 text-zinc-500">
-                          Assim que novos registros forem aprovados, eles aparecerão aqui para consulta pública.
+                          Enquanto isso, você pode acessar nosso guia público e
+                          entender como agir nas primeiras horas de um
+                          desaparecimento.
                         </p>
+
+                        <Link
+                          to="/guia"
+                          className="mt-4 inline-flex rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-500"
+                        >
+                          Acessar guia
+                        </Link>
                       </div>
                     )}
 
@@ -194,7 +222,8 @@ export default function RedeAlertaHomepage() {
                       Informação salva tempo. Compartilhamento amplia alcance.
                     </p>
                     <p className="mt-2 text-xs leading-6 text-zinc-300">
-                      Quanto mais pessoas tiverem acesso a um caso, maiores são as chances de uma pista chegar até a família.
+                      Quanto mais pessoas tiverem acesso a um caso, maiores são
+                      as chances de uma pista chegar até a família.
                     </p>
                   </div>
                 </div>
@@ -215,9 +244,10 @@ export default function RedeAlertaHomepage() {
               </h2>
 
               <p className="mt-4 text-sm leading-7 text-zinc-400 sm:text-base">
-                O Rede Alerta nasceu para ser uma ferramenta de mobilização social.
-                Se você acredita na força da informação, da comunidade e da solidariedade,
-                pode ajudar essa iniciativa a alcançar mais pessoas e fortalecer essa rede.
+                O Rede Alerta nasceu para ser uma ferramenta de mobilização
+                social. Se você acredita na força da informação, da comunidade e
+                da solidariedade, pode ajudar essa iniciativa a alcançar mais
+                pessoas e fortalecer essa rede.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
@@ -239,14 +269,58 @@ export default function RedeAlertaHomepage() {
           </div>
         </section>
 
-        <section id="casos" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <section className="border-b border-white/10 bg-gradient-to-br from-white/[0.02] to-red-500/[0.04]">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="grid gap-6 rounded-[32px] border border-white/10 bg-white/[0.03] p-8 lg:grid-cols-[1.4fr_0.8fr] lg:items-center">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
+                  Guia público
+                </p>
+
+                <h2 className="mt-2 text-3xl font-black text-white sm:text-4xl">
+                  Saiba o que fazer nas primeiras horas de um desaparecimento
+                </h2>
+
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
+                  Mesmo sem casos publicados no momento, o Rede Alerta também
+                  pode ajudar com orientação, preparo e informação útil para
+                  famílias e comunidade.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3 lg:items-end">
+                <Link
+                  to="/guia"
+                  className="w-full rounded-2xl bg-red-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-red-700/30 transition hover:bg-red-500 lg:w-auto"
+                >
+                  Acessar guia completo
+                </Link>
+
+                <Link
+                  to="/cadastrar"
+                  className="w-full rounded-2xl border border-white/15 px-6 py-3 text-center text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 lg:w-auto"
+                >
+                  Cadastrar caso
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="casos"
+          className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+        >
           <div className="mb-8">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
               Casos publicados
             </p>
-            <h2 className="mt-2 text-3xl font-black text-white">Desaparecidos recentes</h2>
+            <h2 className="mt-2 text-3xl font-black text-white">
+              Desaparecidos recentes
+            </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400 sm:text-base">
-              Casos revisados antes da publicação, com foco em clareza, responsabilidade e fácil compartilhamento.
+              Casos revisados antes da publicação, com foco em clareza,
+              responsabilidade e fácil compartilhamento.
             </p>
           </div>
 
@@ -254,7 +328,19 @@ export default function RedeAlertaHomepage() {
 
           {!loading && cases.length === 0 && (
             <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-center text-zinc-400">
-              Ainda não existem casos publicados.
+              <p>Ainda não existem casos publicados.</p>
+              <p className="mt-3 text-sm leading-6 text-zinc-500">
+                Enquanto a plataforma cresce, você pode acessar nosso guia
+                público e entender como agir em uma situação de desaparecimento.
+              </p>
+              <div className="mt-5">
+                <Link
+                  to="/guia"
+                  className="inline-flex rounded-2xl bg-red-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-red-700/30 transition hover:bg-red-500"
+                >
+                  Acessar guia público
+                </Link>
+              </div>
             </div>
           )}
 
@@ -286,7 +372,9 @@ export default function RedeAlertaHomepage() {
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="text-2xl font-black text-white">{person.full_name}</h3>
+                      <h3 className="text-2xl font-black text-white">
+                        {person.full_name}
+                      </h3>
                       <p className="mt-1 text-sm text-zinc-400">
                         {person.age} anos • {person.city}/{person.state}
                       </p>
@@ -296,12 +384,15 @@ export default function RedeAlertaHomepage() {
                       <p className="text-[10px] font-semibold uppercase tracking-wide text-red-300">
                         Data
                       </p>
-                      <p className="text-sm font-bold text-red-200">{person.missing_date}</p>
+                      <p className="text-sm font-bold text-red-200">
+                        {person.missing_date}
+                      </p>
                     </div>
                   </div>
 
                   <p className="mt-4 text-sm leading-6 text-zinc-300">
-                    {person.case_description || "Caso aprovado para divulgação pública e compartilhamento responsável."}
+                    {person.case_description ||
+                      "Caso aprovado para divulgação pública e compartilhamento responsável."}
                   </p>
 
                   <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -328,9 +419,10 @@ export default function RedeAlertaHomepage() {
                 Um fluxo pensado para confiança, cuidado e rapidez
               </h2>
               <p className="mt-4 text-sm leading-7 text-zinc-400 sm:text-base">
-                O caso é enviado pelo responsável, passa por análise antes da publicação e,
-                após aprovação, fica disponível para consulta pública e compartilhamento.
-                Tudo para ampliar o alcance da informação com mais responsabilidade.
+                O caso é enviado pelo responsável, passa por análise antes da
+                publicação e, após aprovação, fica disponível para consulta
+                pública e compartilhamento. Tudo para ampliar o alcance da
+                informação com mais responsabilidade.
               </p>
             </div>
 
@@ -339,17 +431,17 @@ export default function RedeAlertaHomepage() {
                 [
                   "1",
                   "Envio do caso",
-                  "A família ou responsável preenche as informações e envia os dados da pessoa desaparecida."
+                  "A família ou responsável preenche as informações e envia os dados da pessoa desaparecida.",
                 ],
                 [
                   "2",
                   "Análise e moderação",
-                  "A equipe revisa o conteúdo antes da publicação para manter a clareza e a confiabilidade das informações."
+                  "A equipe revisa o conteúdo antes da publicação para manter a clareza e a confiabilidade das informações.",
                 ],
                 [
                   "3",
                   "Publicação e mobilização",
-                  "Após aprovação, o caso ganha visibilidade pública para ampliar as chances de identificação e apoio."
+                  "Após aprovação, o caso ganha visibilidade pública para ampliar as chances de identificação e apoio.",
                 ],
               ].map(([step, title, desc]) => (
                 <div
@@ -377,15 +469,19 @@ export default function RedeAlertaHomepage() {
                 Mais do que uma plataforma, uma rede de atenção.
               </h2>
               <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-zinc-400 sm:text-base">
-                Nosso objetivo é criar um espaço confiável para tornar cada caso mais visível,
-                aproximar informação de quem precisa e fortalecer a mobilização em torno de cada desaparecimento.
+                Nosso objetivo é criar um espaço confiável para tornar cada caso
+                mais visível, aproximar informação de quem precisa e fortalecer a
+                mobilização em torno de cada desaparecimento.
               </p>
             </div>
           </div>
         </section>
       </main>
 
-      <footer id="rodape" className="mx-auto max-w-7xl px-4 py-10 text-sm text-zinc-400 sm:px-6 lg:px-8">
+      <footer
+        id="rodape"
+        className="mx-auto max-w-7xl px-4 py-10 text-sm text-zinc-400 sm:px-6 lg:px-8"
+      >
         <div className="grid gap-8 border-t border-white/10 pt-8 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3">
@@ -399,8 +495,9 @@ export default function RedeAlertaHomepage() {
             </div>
 
             <p className="mt-4 max-w-xl leading-7">
-              Plataforma criada para ampliar a divulgação responsável de pessoas desaparecidas,
-              fortalecer a mobilização social e oferecer mais visibilidade a quem precisa ser encontrado.
+              Plataforma criada para ampliar a divulgação responsável de pessoas
+              desaparecidas, fortalecer a mobilização social e oferecer mais
+              visibilidade a quem precisa ser encontrado.
             </p>
           </div>
         </div>
@@ -409,8 +506,6 @@ export default function RedeAlertaHomepage() {
           <div className="mb-3 text-center text-xs uppercase tracking-[0.18em] text-zinc-500">
             Publicidade
           </div>
-
-          
         </div>
       </footer>
     </div>

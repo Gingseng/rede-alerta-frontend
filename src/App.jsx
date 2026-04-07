@@ -6,6 +6,7 @@ import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import CaseDetailPage from "./pages/CaseDetailPage";
 import AdminTipsPage from "./pages/AdminTipsPage";
+import PublicGuidePage from "./pages/PublicGuidePage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
 
         {/* 🌐 PÚBLICO */}
         <Route path="/caso/:id" element={<CaseDetailPage />} />
+        <Route path="/guia" element={<PublicGuidePage />} />
       </Routes>
       <Analytics />
     </BrowserRouter>
