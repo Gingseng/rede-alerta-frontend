@@ -22,7 +22,7 @@ export default function AdminNewsEditorPage() {
 
   async function loadPost() {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admin_token");
 
       const response = await api.get("/news/admin", {
         headers: {
@@ -69,7 +69,7 @@ export default function AdminNewsEditorPage() {
     setSaving(true);
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admin_token");
 
       if (isEditing) {
         await api.put(`/news/admin/${id}`, form, {
