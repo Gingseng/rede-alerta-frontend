@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import api from "../services/api";
 
 export default function NewsDetailPage() {
@@ -23,24 +24,28 @@ export default function NewsDetailPage() {
     loadPost();
   }, [slug]);
 
-  useEffect(() => {
-    if (post) {
-      document.title = `${post.title} | Rede Alerta`;
+  function shareWhatsApp() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(
+      `Veja esta publicação do Rede Alerta: ${post?.title || ""}`
+    );
+    window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, "_blank");
+  }
 
-      let metaDescription = document.querySelector('meta[name="description"]');
+  function shareFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
+  }
 
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.setAttribute("name", "description");
-        document.head.appendChild(metaDescription);
-      }
-
-      metaDescription.setAttribute(
-        "content",
-        post.summary || "Conteúdo público do Rede Alerta."
-      );
+  async function shareCopy() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("Link copiado com sucesso.");
+    } catch (error) {
+      console.error("Erro ao copiar link:", error);
+      alert("Não foi possível copiar o link.");
     }
-  }, [post]);
+  }
 
   if (loading) {
     return (
@@ -73,8 +78,33 @@ export default function NewsDetailPage() {
     );
   }
 
+  const pageTitle = `${post.title} | Rede Alerta`;
+  const pageDescription =
+    post.summary ||
+    (post.content ? post.content.slice(0, 160) : "Conteúdo público do Rede Alerta.");
+  const pageImage =
+    post.cover_image_url ||
+    "https://redealerta.ong.br/og-default.jpg";
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Rede Alerta" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={pageImage} />
+      </Helmet>
+
       <article className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-8">
           <Link
@@ -112,8 +142,33 @@ export default function NewsDetailPage() {
         </h1>
 
         {post.summary && (
-          <p className="mt-5 text-lg leading-8 text-zinc-300">{post.summary}</p>
+          <p className="mt-5 text-lg leading-8 text-zinc-300">
+            {post.summary}
+          </p>
         )}
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          <button
+            onClick={shareWhatsApp}
+            className="rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-500"
+          >
+            Compartilhar no WhatsApp
+          </button>
+
+          <button
+            onClick={shareFacebook}
+            className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
+          >
+            Compartilhar no Facebook
+          </button>
+
+          <button
+            onClick={shareCopy}
+            className="rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+          >
+            Copiar link
+          </button>
+        </div>
 
         <div className="mt-10 rounded-[28px] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
           <div className="whitespace-pre-line text-sm leading-8 text-zinc-300 sm:text-base">
