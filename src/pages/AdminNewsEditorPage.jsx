@@ -24,6 +24,11 @@ export default function AdminNewsEditorPage() {
     try {
       const token = localStorage.getItem("admin_token");
 
+      if (!token) {
+        navigate("/colaborador/login", { replace: true });
+        return;
+      }
+
       const response = await api.get("/news/admin", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,7 +39,7 @@ export default function AdminNewsEditorPage() {
 
       if (!post) {
         alert("Notícia não encontrada.");
-        navigate("/colaborador/noticias");
+        navigate("/colaborador/noticias", { replace: true });
         return;
       }
 
@@ -48,9 +53,15 @@ export default function AdminNewsEditorPage() {
       });
     } catch (error) {
       console.error("Erro ao carregar notícia:", error);
+
       if (error.response?.status === 401) {
-        navigate("/colaborador/login");
+        localStorage.removeItem("admin_token");
+        navigate("/colaborador/login", { replace: true });
+        return;
       }
+
+      alert("Não foi possível carregar a notícia.");
+      navigate("/colaborador/noticias", { replace: true });
     } finally {
       setLoading(false);
     }
@@ -71,6 +82,11 @@ export default function AdminNewsEditorPage() {
     try {
       const token = localStorage.getItem("admin_token");
 
+      if (!token) {
+        navigate("/colaborador/login", { replace: true });
+        return;
+      }
+
       if (isEditing) {
         await api.put(`/news/admin/${id}`, form, {
           headers: {
@@ -85,9 +101,16 @@ export default function AdminNewsEditorPage() {
         });
       }
 
-      navigate("/colaborador/noticias");
+      navigate("/colaborador/noticias", { replace: true });
     } catch (error) {
       console.error("Erro ao salvar notícia:", error);
+
+      if (error.response?.status === 401) {
+        localStorage.removeItem("admin_token");
+        navigate("/colaborador/login", { replace: true });
+        return;
+      }
+
       alert("Não foi possível salvar a notícia.");
     } finally {
       setSaving(false);

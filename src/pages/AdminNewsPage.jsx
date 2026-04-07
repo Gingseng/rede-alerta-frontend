@@ -8,48 +8,70 @@ export default function AdminNewsPage() {
   const navigate = useNavigate();
 
   async function loadPosts() {
-  try {
-    const token = localStorage.getItem("admin_token");
+    try {
+      const token = localStorage.getItem("admin_token");
 
-    const response = await api.get("/news/admin", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      if (!token) {
+        navigate("/colaborador/login", { replace: true });
+        return;
+      }
 
-    setPosts(response.data);
-  } catch (error) {
-    console.error("Erro ao carregar notícias:", error);
-    if (error.response?.status === 401) {
-      navigate("/colaborador/login");
+      const response = await api.get("/news/admin", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setPosts(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.error("Erro ao carregar notícias:", error);
+
+      if (error.response?.status === 401) {
+        localStorage.removeItem("admin_token");
+        navigate("/colaborador/login", { replace: true });
+        return;
+      }
+
+      alert("Não foi possível carregar as notícias.");
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
   }
-}
 
-async function handleDelete(postId) {
-  const confirmDelete = window.confirm(
-    "Tem certeza que deseja excluir esta notícia?"
-  );
+  async function handleDelete(postId) {
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir esta notícia?"
+    );
 
-  if (!confirmDelete) return;
+    if (!confirmDelete) return;
 
-  try {
-    const token = localStorage.getItem("admin_token");
+    try {
+      const token = localStorage.getItem("admin_token");
 
-    await api.delete(`/news/admin/${postId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      if (!token) {
+        navigate("/colaborador/login", { replace: true });
+        return;
+      }
 
-    setPosts((prev) => prev.filter((post) => post.id !== postId));
-  } catch (error) {
-    console.error("Erro ao excluir notícia:", error);
-    alert("Não foi possível excluir a notícia.");
+      await api.delete(`/news/admin/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setPosts((prev) => prev.filter((post) => post.id !== postId));
+    } catch (error) {
+      console.error("Erro ao excluir notícia:", error);
+
+      if (error.response?.status === 401) {
+        localStorage.removeItem("admin_token");
+        navigate("/colaborador/login", { replace: true });
+        return;
+      }
+
+      alert("Não foi possível excluir a notícia.");
+    }
   }
-}
 
   useEffect(() => {
     document.title = "Administração de Notícias | Rede Alerta";
