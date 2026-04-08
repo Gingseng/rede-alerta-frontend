@@ -24,29 +24,6 @@ export default function NewsDetailPage() {
     loadPost();
   }, [slug]);
 
-  function shareWhatsApp() {
-    const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(
-      `Veja esta publicação do Rede Alerta: ${post?.title || ""}`
-    );
-    window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, "_blank");
-  }
-
-  function shareFacebook() {
-    const url = encodeURIComponent(window.location.href);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
-  }
-
-  async function shareCopy() {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      alert("Link copiado com sucesso.");
-    } catch (error) {
-      console.error("Erro ao copiar link:", error);
-      alert("Não foi possível copiar o link.");
-    }
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-950 px-4 py-10 text-white">
@@ -78,13 +55,41 @@ export default function NewsDetailPage() {
     );
   }
 
+  const frontendUrl = window.location.href;
+  const shareLink = `${import.meta.env.VITE_API_URL}/share/news/${post.slug}`;
+
   const pageTitle = `${post.title} | Rede Alerta`;
   const pageDescription =
     post.summary ||
-    (post.content ? post.content.slice(0, 160) : "Conteúdo público do Rede Alerta.");
+    (post.content
+      ? post.content.slice(0, 160)
+      : "Conteúdo público do Rede Alerta.");
+
   const pageImage =
-    post.cover_image_url ||
-    "https://redealerta.ong.br/og-default.jpg";
+    post.cover_image_url || "https://redealerta.ong.br/og-default.jpg";
+
+  function shareWhatsApp() {
+    const url = encodeURIComponent(shareLink);
+    const text = encodeURIComponent(
+      `Veja esta publicação do Rede Alerta: ${post?.title || ""}`
+    );
+    window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, "_blank");
+  }
+
+  function shareFacebook() {
+    const url = encodeURIComponent(shareLink);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
+  }
+
+  async function shareCopy() {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      alert("Link de compartilhamento copiado com sucesso.");
+    } catch (error) {
+      console.error("Erro ao copiar link:", error);
+      alert("Não foi possível copiar o link.");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
@@ -95,7 +100,7 @@ export default function NewsDetailPage() {
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content={pageImage} />
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:url" content={frontendUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Rede Alerta" />
 
@@ -168,6 +173,13 @@ export default function NewsDetailPage() {
           >
             Copiar link
           </button>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+            Link de compartilhamento
+          </p>
+          <p className="mt-2 break-all text-sm text-zinc-300">{shareLink}</p>
         </div>
 
         <div className="mt-10 rounded-[28px] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
