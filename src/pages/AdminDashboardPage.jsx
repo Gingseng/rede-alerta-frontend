@@ -106,6 +106,16 @@ function getInstagramDotClass(instagramStatus) {
   return "bg-red-500";
 }
 
+function resolveImageUrl(photoUrl) {
+  if (!photoUrl) return "";
+
+  if (photoUrl.startsWith("http://") || photoUrl.startsWith("https://")) {
+    return photoUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}/${photoUrl}`.replace(/([^:]\/)\/+/g, "$1");
+}
+
 export default function AdminDashboardPage() {
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -390,7 +400,7 @@ export default function AdminDashboardPage() {
             <div className="mt-5 overflow-hidden rounded-[28px] border border-white/10 bg-black/20">
               {person?.photo_url ? (
                 <img
-                  src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                  src={resolveImageUrl(person.photo_url)}
                   alt={person.full_name}
                   className="h-[420px] w-full object-cover"
                 />
@@ -456,7 +466,7 @@ export default function AdminDashboardPage() {
               <div className="overflow-hidden rounded-[28px] border border-white/10 bg-black/20">
                 {person?.photo_url ? (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                    src={resolveImageUrl(person.photo_url)}
                     alt={person.full_name}
                     className="h-[360px] w-full object-cover"
                   />
@@ -513,7 +523,7 @@ export default function AdminDashboardPage() {
               <div className="overflow-hidden rounded-[28px] border border-white/10 bg-black/20">
                 {person?.photo_url ? (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                    src={resolveImageUrl(person.photo_url)}
                     alt={person.full_name}
                     className="h-full w-full object-cover"
                   />
@@ -578,7 +588,7 @@ export default function AdminDashboardPage() {
               <div className="overflow-hidden rounded-[28px] border border-white/10 bg-black/20">
                 {person?.photo_url ? (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                    src={resolveImageUrl(person.photo_url)}
                     alt={person.full_name}
                     className="h-full w-full object-cover"
                   />
@@ -636,7 +646,7 @@ export default function AdminDashboardPage() {
             <div className="overflow-hidden rounded-[28px] border border-white/10 bg-black/20">
               {person?.photo_url ? (
                 <img
-                  src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                  src={resolveImageUrl(person.photo_url)}
                   alt={person.full_name}
                   className="h-full w-full object-cover"
                 />
@@ -949,7 +959,7 @@ export default function AdminDashboardPage() {
                         <div className="h-16 w-16 overflow-hidden rounded-2xl bg-neutral-900">
                           {person.photo_url ? (
                             <img
-                              src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                              src={resolveImageUrl(person.photo_url)}
                               alt={person.full_name}
                               className="h-full w-full object-cover"
                             />
@@ -1048,7 +1058,7 @@ export default function AdminDashboardPage() {
                         <div className="h-72 bg-neutral-900 lg:h-full">
                           {person.photo_url ? (
                             <img
-                              src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                              src={resolveImageUrl(person.photo_url)}
                               alt={person.full_name}
                               className="h-full w-full object-cover"
                             />

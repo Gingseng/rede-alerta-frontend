@@ -2,6 +2,16 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import { Link } from "react-router-dom";
 
+function resolveImageUrl(imageUrl) {
+  if (!imageUrl) return "";
+
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}/${imageUrl}`.replace(/([^:]\/)\/+/g, "$1");
+}
+
 export default function RedeAlertaHomepage() {
   const [cases, setCases] = useState([]);
   const [newsPosts, setNewsPosts] = useState([]);
@@ -240,7 +250,7 @@ export default function RedeAlertaHomepage() {
                         <div className="h-16 w-16 overflow-hidden rounded-2xl bg-neutral-800">
                           {person.photo_url ? (
                             <img
-                              src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                              src={resolveImageUrl(person.photo_url)}
                               alt={person.full_name}
                               className="h-full w-full object-cover"
                             />
@@ -412,7 +422,7 @@ export default function RedeAlertaHomepage() {
                     <div className="h-52 overflow-hidden bg-neutral-900">
                       {post.cover_image_url ? (
                         <img
-                          src={post.cover_image_url}
+                          src={resolveImageUrl(post.cover_image_url)}
                           alt={post.title}
                           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         />
@@ -509,7 +519,7 @@ export default function RedeAlertaHomepage() {
                 <div className="relative">
                   {person.photo_url ? (
                     <img
-                      src={`${import.meta.env.VITE_API_URL}${person.photo_url}`}
+                      src={resolveImageUrl(person.photo_url)}
                       alt={person.full_name}
                       className="h-72 w-full object-cover sm:h-80"
                     />
