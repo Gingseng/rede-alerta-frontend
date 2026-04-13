@@ -60,7 +60,7 @@ export default function NewsDetailPage() {
   }
 
   const publicUrl = `https://www.redealerta.ong.br/informacoes/${post.slug}`;
-  const shareLink = publicUrl;
+  const shareLink = `${import.meta.env.VITE_API_URL}/share/news/${post.slug}`;
 
   const pageTitle = `${post.title} | Rede Alerta`;
   const pageDescription =
@@ -105,6 +105,7 @@ export default function NewsDetailPage() {
         <meta property="og:image:alt" content={post.title} />
         <meta property="og:url" content={publicUrl} />
         <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Rede Alerta" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
