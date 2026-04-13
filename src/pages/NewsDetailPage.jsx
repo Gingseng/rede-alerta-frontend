@@ -10,7 +10,8 @@ function resolveImageUrl(imageUrl) {
     return imageUrl;
   }
 
-  return `${import.meta.env.VITE_API_URL}/${imageUrl}`.replace(/([^:]\/)\/+/g, "$1");
+  const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+  return `${apiBaseUrl}/${imageUrl}`.replace(/([^:]\/)\/+/g, "$1");
 }
 
 export default function NewsDetailPage() {
@@ -60,7 +61,8 @@ export default function NewsDetailPage() {
   }
 
   const publicUrl = `https://www.redealerta.ong.br/informacoes/${post.slug}`;
-  const shareLink = `${import.meta.env.VITE_API_URL}/share/news/${post.slug}`;
+  const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+  const shareLink = `${apiBaseUrl}/share/news/${post.slug}`;
 
   const pageTitle = `${post.title} | Rede Alerta`;
   const pageDescription =
