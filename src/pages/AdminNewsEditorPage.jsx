@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 
@@ -11,12 +11,23 @@ const initialForm = {
   status: "rascunho",
 };
 
+function resolveImageUrl(imageUrl) {
+  if (!imageUrl) return "";
+
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}/${imageUrl}`.replace(/([^:]\/)\/+/g, "$1");
+}
+
 export default function AdminNewsEditorPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
 
   const [form, setForm] = useState(initialForm);
+  const [coverImageFile, setCoverImageFile] = useState(null);
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
 
@@ -75,6 +86,35 @@ export default function AdminNewsEditorPage() {
     }));
   }
 
+  function handleFileChange(event) {
+    const file = event.target.files?.[0] || null;
+    setCoverImageFile(file);
+  }
+
+  function removeSelectedFile() {
+    setCoverImageFile(null);
+  }
+
+  const previewImage = useMemo(() => {
+    if (coverImageFile) {
+      return URL.createObjectURL(coverImageFile);
+    }
+
+    if (form.cover_image_url) {
+      return resolveImageUrl(form.cover_image_url);
+    }
+
+    return "";
+  }, [coverImageFile, form.cover_image_url]);
+
+  useEffect(() => {
+    return () => {
+      if (coverImageFile) {
+        URL.revokeObjectURL(previewImage);
+      }
+    };
+  }, [coverImageFile, previewImage]);
+
   async function handleSubmit(event) {
     event.preventDefault();
     setSaving(true);
@@ -87,16 +127,33 @@ export default function AdminNewsEditorPage() {
         return;
       }
 
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("summary", form.summary || "");
+      formData.append("content", form.content);
+      formData.append("category", form.category || "");
+      formData.append("status", form.status || "rascunho");
+
+      if (form.cover_image_url) {
+        formData.append("cover_image_url", form.cover_image_url);
+      }
+
+      if (coverImageFile) {
+        formData.append("cover_image_file", coverImageFile);
+      }
+
       if (isEditing) {
-        await api.put(`/news/admin/${id}`, form, {
+        await api.put(`/news/admin/${id}`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         });
       } else {
-        await api.post("/news/admin", form, {
+        await api.post("/news/admin", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         });
       }
@@ -111,7 +168,7 @@ export default function AdminNewsEditorPage() {
         return;
       }
 
-      alert("Não foi possível salvar a notícia.");
+      alert(error?.response?.data?.detail || "Não foi possível salvar a notícia.");
     } finally {
       setSaving(false);
     }
@@ -212,7 +269,34 @@ export default function AdminNewsEditorPage() {
           <div className="grid gap-6 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-semibold text-white">
-                URL da imagem de capa
+                Enviar imagem de capa
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full rounded-2xl border border-white/10 bg-neutral-900 px-4 py-3 text-white outline-none transition file:mr-4 file:rounded-xl file:border-0 file:bg-red-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-red-500"
+              />
+
+              {coverImageFile && (
+                <div className="mt-3 flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
+                  <p className="truncate text-sm text-zinc-300">
+                    {coverImageFile.name}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={removeSelectedFile}
+                    className="ml-3 rounded-xl border border-white/10 px-3 py-2 text-xs font-semibold text-zinc-200 transition hover:bg-white/[0.08]"
+                  >
+                    Remover
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-white">
+                Ou use uma URL de imagem
               </label>
               <input
                 type="text"
@@ -222,21 +306,24 @@ export default function AdminNewsEditorPage() {
                 className="w-full rounded-2xl border border-white/10 bg-neutral-900 px-4 py-3 text-white outline-none transition focus:border-red-500/40"
                 placeholder="https://..."
               />
+              <p className="mt-2 text-xs leading-6 text-zinc-500">
+                Se você enviar um arquivo, ele terá prioridade sobre a URL.
+              </p>
             </div>
+          </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-white">
-                Categoria
-              </label>
-              <input
-                type="text"
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                className="w-full rounded-2xl border border-white/10 bg-neutral-900 px-4 py-3 text-white outline-none transition focus:border-red-500/40"
-                placeholder="Ex: Orientações, Notícias, Atualizações"
-              />
-            </div>
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-white">
+              Categoria
+            </label>
+            <input
+              type="text"
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-white/10 bg-neutral-900 px-4 py-3 text-white outline-none transition focus:border-red-500/40"
+              placeholder="Ex: Orientações, Notícias, Atualizações"
+            />
           </div>
 
           <div>
@@ -254,14 +341,14 @@ export default function AdminNewsEditorPage() {
             </select>
           </div>
 
-          {form.cover_image_url && (
+          {previewImage && (
             <div>
               <p className="mb-3 text-sm font-semibold text-white">
                 Prévia da capa
               </p>
               <div className="overflow-hidden rounded-[24px] border border-white/10 bg-neutral-900">
                 <img
-                  src={form.cover_image_url}
+                  src={previewImage}
                   alt="Prévia da capa"
                   className="h-64 w-full object-cover"
                 />
