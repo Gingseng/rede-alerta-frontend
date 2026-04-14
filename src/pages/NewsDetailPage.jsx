@@ -60,9 +60,9 @@ export default function NewsDetailPage() {
     );
   }
 
-  const publicUrl = `https://www.redealerta.ong.br/informacoes/${post.slug}`;
-  const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
-  const shareLink = `${apiBaseUrl}/share/news/${post.slug}`;
+  const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.redealerta.ong.br").replace(/\/+$/, "");
+  const publicUrl = `${siteUrl}/informacoes/${post.slug}`;
+  const shareLink = `${siteUrl}/share/news/${post.slug}`;
 
   const pageTitle = `${post.title} | Rede Alerta`;
   const pageDescription =
@@ -108,6 +108,7 @@ export default function NewsDetailPage() {
         <meta property="og:url" content={publicUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Rede Alerta" />
+        <meta property="og:locale" content="pt_BR" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
