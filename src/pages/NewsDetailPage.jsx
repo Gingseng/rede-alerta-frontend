@@ -70,17 +70,22 @@ export default function NewsDetailPage() {
     (post.content ? post.content.slice(0, 160) : "Conteúdo público do Rede Alerta.");
 
   const resolvedCoverImage = resolveImageUrl(post.cover_image_url);
-  const pageImage = resolvedCoverImage || "https://www.redealerta.ong.br/og-default.jpg";
+  const pageImage = resolvedCoverImage || `${siteUrl}/og-default.jpg`;
+
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+    `Veja esta publicação do Rede Alerta: ${shareLink}`
+  )}`;
+
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+    shareLink
+  )}`;
 
   function shareWhatsApp() {
-    const url = encodeURIComponent(shareLink);
-    const text = encodeURIComponent(`Veja esta publicação do Rede Alerta: ${post?.title || ""}`);
-    window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, "_blank");
+    window.open(whatsappUrl, "_blank");
   }
 
   function shareFacebook() {
-    const url = encodeURIComponent(shareLink);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
+    window.open(facebookUrl, "_blank");
   }
 
   async function shareCopy() {
@@ -90,6 +95,24 @@ export default function NewsDetailPage() {
     } catch (error) {
       console.error("Erro ao copiar link:", error);
       alert("Não foi possível copiar o link.");
+    }
+  }
+
+  async function handleNativeShare() {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: pageTitle,
+          text: pageDescription,
+          url: shareLink,
+        });
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareLink);
+      alert("Link de compartilhamento copiado com sucesso.");
+    } catch (error) {
+      console.error("Erro ao compartilhar:", error);
     }
   }
 
@@ -168,6 +191,13 @@ export default function NewsDetailPage() {
                 </button>
 
                 <button
+                  onClick={handleNativeShare}
+                  className="rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-bold text-black transition hover:bg-yellow-300"
+                >
+                  Compartilhar publicação
+                </button>
+
+                <button
                   onClick={shareCopy}
                   className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold transition hover:bg-white/[0.08]"
                 >
@@ -180,6 +210,33 @@ export default function NewsDetailPage() {
                   Link de compartilhamento
                 </p>
                 <p className="mt-2 break-all text-sm text-zinc-300">{shareLink}</p>
+
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-2xl bg-green-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-green-500"
+                  >
+                    Compartilhar no WhatsApp
+                  </a>
+
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-2xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-500"
+                  >
+                    Compartilhar no Facebook
+                  </a>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-red-300">
+                  Link público da publicação
+                </p>
+                <p className="mt-2 break-all text-sm text-zinc-300">{publicUrl}</p>
               </div>
 
               <div className="prose prose-invert mt-8 max-w-none whitespace-pre-line">
