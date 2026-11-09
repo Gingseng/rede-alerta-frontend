@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
 import TipModal from "../components/TipModal";
+import { buildCasePublicUrl, buildCaseShareUrl } from "../utils/publicUrl";
 
 function resolveImageUrl(imageUrl) {
   if (!imageUrl) return "";
@@ -61,9 +62,8 @@ export default function CaseDetailPage() {
     );
   }
 
-  const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.redealerta.ong.br").replace(/\/+$/, "");
-  const publicUrl = `${siteUrl}/caso/${person.id}`;
-  const shareUrl = `${siteUrl}/share/case/${person.id}`;
+  const publicUrl = buildCasePublicUrl(person.id);
+  const shareUrl = buildCaseShareUrl(person.id);
 
   const resolvedPhotoUrl = resolveImageUrl(person.photo_url);
 
@@ -187,25 +187,9 @@ export default function CaseDetailPage() {
                   </p>
                 </div>
 
-                <div>
-                  <h2 className="text-sm font-bold uppercase tracking-wide text-red-300">
-                    Boletim de ocorrência
-                  </h2>
-                  <p className="mt-2 whitespace-pre-line text-zinc-300">
-                    {person.police_report_number || "Não informado."}
-                  </p>
-                </div>
-
-                <div>
-                  <h2 className="text-sm font-bold uppercase tracking-wide text-red-300">
-                    Contato responsável
-                  </h2>
-                  <p className="mt-2 whitespace-pre-line text-zinc-300">
-                    {person.contact_name || "Não informado."}
-                  </p>
-                  <p className="mt-1 whitespace-pre-line text-zinc-300">
-                    {person.contact_phone || "Não informado."}
-                  </p>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-zinc-300">
+                  Para enviar uma informação sobre este caso, use o botão “Tenho informação”.
+                  Os dados do responsável são tratados no fluxo administrativo e não aparecem publicamente.
                 </div>
               </div>
 

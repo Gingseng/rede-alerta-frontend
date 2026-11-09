@@ -60,7 +60,7 @@ export default function CreateCasePage() {
   const [form, setForm] = useState(initialForm);
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [submission, setSubmission] = useState(null);
 
   const photoPreview = useMemo(() => {
     if (!photo) return null;
@@ -83,7 +83,7 @@ export default function CreateCasePage() {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    setSuccess(false);
+    setSubmission(null);
 
     try {
       const formData = new FormData();
@@ -104,13 +104,13 @@ export default function CreateCasePage() {
         formData.append("photo", photo);
       }
 
-      await api.post("/cases/", formData, {
+      const response = await api.post("/cases/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      setSuccess(true);
+      setSubmission(response.data);
       setForm(initialForm);
       setPhoto(null);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -131,12 +131,12 @@ export default function CreateCasePage() {
           </div>
 
           <h1 className="max-w-3xl text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">
-            Envie as informações do desaparecimento para análise e publicação.
+            Envie informações verificáveis para triagem e publicação responsável.
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-300 sm:text-base">
-            Preencha os dados com atenção. Após o envio, o caso ficará pendente
-            até ser revisado e aprovado para divulgação pública.
+            Cadastros completos e consistentes podem ser publicados automaticamente.
+            Informações incompletas, duplicadas, inconsistentes ou suspeitas ficam em revisão segura.
           </p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -153,9 +153,9 @@ export default function CreateCasePage() {
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <p className="text-sm font-bold text-white">3. Aguarde aprovação</p>
+              <p className="text-sm font-bold text-white">3. Triagem automática</p>
               <p className="mt-1 text-xs leading-5 text-zinc-400">
-                A equipe revisa antes da publicação pública.
+                Casos elegíveis seguem para divulgação; os sinalizados são revisados.
               </p>
             </div>
           </div>
@@ -163,12 +163,23 @@ export default function CreateCasePage() {
       </div>
 
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        {success && (
+        {submission && (
           <div className="mb-6 rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-green-100">
-            <p className="font-semibold">Caso enviado com sucesso.</p>
-            <p className="mt-1 text-sm text-green-200/90">
-              O cadastro foi recebido e ficará aguardando aprovação antes de aparecer publicamente.
+            <p className="font-semibold">
+              {submission.triage_status === "published_automatically"
+                ? "Caso publicado automaticamente."
+                : "Caso enviado para revisão segura."}
             </p>
+            <p className="mt-1 text-sm text-green-200/90">
+              {submission.triage_status === "published_automatically"
+                ? "A publicação no site foi concluída. A divulgação em redes sociais depende da configuração administrativa."
+                : "Encontramos pontos que precisam de conferência antes de qualquer divulgação pública."}
+            </p>
+            {submission.review_reasons?.length > 0 && (
+              <p className="mt-2 text-sm text-green-200/90">
+                Motivos: {submission.review_reasons.join(", ")}.
+              </p>
+            )}
           </div>
         )}
 
@@ -260,13 +271,15 @@ export default function CreateCasePage() {
               </div>
 
               <div>
-                <FieldLabel>Descrição do caso</FieldLabel>
+                <FieldLabel required>Descrição do caso</FieldLabel>
                 <Textarea
                   name="case_description"
                   value={form.case_description}
                   onChange={handleChange}
                   placeholder="Conte o contexto do desaparecimento, último local visto e outras informações úteis."
                   className="min-h-[140px]"
+                  minLength={20}
+                  required
                 />
               </div>
             </div>
@@ -279,11 +292,12 @@ export default function CreateCasePage() {
             <div className="grid gap-5 lg:grid-cols-[1fr_260px]">
               <div>
                 <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] p-4">
-                  <FieldLabel>Selecionar arquivo</FieldLabel>
+                  <FieldLabel required>Selecionar arquivo</FieldLabel>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
+                    required
                     className="block w-full text-sm text-zinc-300 file:mr-4 file:rounded-xl file:border-0 file:bg-red-600 file:px-4 file:py-2 file:font-semibold file:text-white hover:file:bg-red-500"
                   />
                   <p className="mt-3 text-xs leading-5 text-zinc-400">
@@ -361,9 +375,9 @@ export default function CreateCasePage() {
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-5 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-base font-bold text-white">Enviar caso para análise</p>
+                <p className="text-base font-bold text-white">Enviar caso para triagem</p>
                 <p className="mt-1 text-sm leading-6 text-zinc-400">
-                  O caso será salvo como pendente até passar pela moderação.
+                  Casos elegíveis são publicados no site; casos sinalizados ficam em revisão.
                 </p>
               </div>
 

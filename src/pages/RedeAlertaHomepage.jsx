@@ -601,7 +601,7 @@ export default function RedeAlertaHomepage() {
                 [
                   "2",
                   "Análise e moderação",
-                  "A equipe revisa o conteúdo antes da publicação para manter a clareza e a confiabilidade das informações.",
+                  "A plataforma aplica uma triagem automática: cadastros consistentes podem ser publicados, e os sinalizados seguem para revisão.",
                 ],
                 [
                   "3",

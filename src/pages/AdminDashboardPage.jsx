@@ -1222,6 +1222,19 @@ export default function AdminDashboardPage() {
                         : instagramStatus?.message || "Status ainda não carregado."}
                     </p>
 
+                    {instagramStatus?.platforms && (
+                      <div className="mt-3 space-y-2 text-xs leading-5 text-zinc-400">
+                        <p>
+                          <span className="font-semibold text-zinc-200">Instagram:</span>{" "}
+                          {instagramStatus.platforms.instagram?.message}
+                        </p>
+                        <p>
+                          <span className="font-semibold text-zinc-200">Facebook:</span>{" "}
+                          {instagramStatus.platforms.facebook?.message}
+                        </p>
+                      </div>
+                    )}
+
                     {instagramStatus?.account_id && (
                       <p className="mt-2 text-[11px] leading-5 text-zinc-500">
                         Account ID: {instagramStatus.account_id}

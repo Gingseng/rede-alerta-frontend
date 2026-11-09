@@ -10,7 +10,8 @@ export function buildNewsPublicUrl(slug) {
 }
 
 export function buildNewsShareUrl(slug) {
-  return `${SITE_URL}/share/news/${slug}`;
+  const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+  return apiBase ? `${apiBase}/share/news/${slug}` : buildNewsPublicUrl(slug);
 }
 
 export function buildCasePublicUrl(id) {
@@ -18,7 +19,8 @@ export function buildCasePublicUrl(id) {
 }
 
 export function buildCaseShareUrl(id) {
-  return `${SITE_URL}/share/case/${id}`;
+  const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+  return apiBase ? `${apiBase}/share/case/${id}` : buildCasePublicUrl(id);
 }
 
 export function toAbsoluteApiAssetUrl(assetUrl) {

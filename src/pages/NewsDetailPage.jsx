@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import api from "../services/api";
+import { buildNewsPublicUrl, buildNewsShareUrl } from "../utils/publicUrl";
 
 function resolveImageUrl(imageUrl) {
   if (!imageUrl) return "";
@@ -60,9 +61,8 @@ export default function NewsDetailPage() {
     );
   }
 
-  const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.redealerta.ong.br").replace(/\/+$/, "");
-  const publicUrl = `${siteUrl}/informacoes/${post.slug}`;
-  const shareLink = `${siteUrl}/share/news/${post.slug}`;
+  const publicUrl = buildNewsPublicUrl(post.slug);
+  const shareLink = buildNewsShareUrl(post.slug);
 
   const pageTitle = `${post.title} | Rede Alerta`;
   const pageDescription =
