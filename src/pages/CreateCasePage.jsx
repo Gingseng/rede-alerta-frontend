@@ -15,13 +15,17 @@ const initialForm = {
   contact_phone: "",
 };
 
-function FieldLabel({ children, required = false }) {
+function FieldLabel({ htmlFor, children, required = false }) {
   return (
-    <label className="mb-2 block text-sm font-semibold text-zinc-200">
+    <label htmlFor={htmlFor} className="mb-2 block text-sm font-semibold text-zinc-200">
       {children}
       {required && <span className="ml-1 text-red-400">*</span>}
     </label>
   );
+}
+
+function FieldTip({ children }) {
+  return <p className="mt-2 text-sm leading-6 text-zinc-400">Dica: {children}</p>;
 }
 
 function Input({ className = "", ...props }) {
@@ -61,6 +65,7 @@ export default function CreateCasePage() {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submission, setSubmission] = useState(null);
+  const [submissionError, setSubmissionError] = useState("");
 
   const photoPreview = useMemo(() => {
     if (!photo) return null;
@@ -84,6 +89,7 @@ export default function CreateCasePage() {
     e.preventDefault();
     setLoading(true);
     setSubmission(null);
+    setSubmissionError("");
 
     try {
       const formData = new FormData();
@@ -116,7 +122,7 @@ export default function CreateCasePage() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error(error);
-      alert("Erro ao cadastrar caso.");
+      setSubmissionError("Não foi possível enviar o cadastro. Confira sua conexão e tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -131,31 +137,31 @@ export default function CreateCasePage() {
           </div>
 
           <h1 className="max-w-3xl text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">
-            Envie informações verificáveis para triagem e publicação responsável.
+            Cadastre uma pessoa desaparecida
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-300 sm:text-base">
-            Cadastros completos e consistentes podem ser publicados automaticamente.
-            Informações incompletas, duplicadas, inconsistentes ou suspeitas ficam em revisão segura.
+            Conte o que aconteceu e preencha os campos com asterisco. A foto e a descrição são opcionais.
+            Depois do envio, nossa equipe confere as informações antes de divulgar o caso.
           </p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <p className="text-sm font-bold text-white">1. Preencha o cadastro</p>
+                <p className="text-sm font-bold text-white">1. Informe os dados principais</p>
               <p className="mt-1 text-xs leading-5 text-zinc-400">
-                Informe dados claros para facilitar a identificação.
+                  As dicas ao lado dos campos ajudam no preenchimento.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <p className="text-sm font-bold text-white">2. Envie a foto</p>
+                <p className="text-sm font-bold text-white">2. Adicione uma foto, se tiver</p>
               <p className="mt-1 text-xs leading-5 text-zinc-400">
-                Uma boa imagem ajuda na circulação e reconhecimento.
+                  A foto é opcional, mas pode ajudar no reconhecimento.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <p className="text-sm font-bold text-white">3. Triagem automática</p>
+                <p className="text-sm font-bold text-white">3. A equipe confere o cadastro</p>
               <p className="mt-1 text-xs leading-5 text-zinc-400">
-                Casos elegíveis seguem para divulgação; os sinalizados são revisados.
+                  As informações são verificadas antes de qualquer divulgação.
               </p>
             </div>
           </div>
@@ -164,7 +170,7 @@ export default function CreateCasePage() {
 
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         {submission && (
-          <div className="mb-6 rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-green-100">
+          <div role="status" className="mb-6 rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-green-100">
             <p className="font-semibold">
               {submission.triage_status === "published_automatically"
                 ? "Caso publicado automaticamente."
@@ -183,6 +189,12 @@ export default function CreateCasePage() {
           </div>
         )}
 
+        {submissionError && (
+          <div role="alert" className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm leading-6 text-red-100">
+            {submissionError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <SectionCard
             title="Informações principais"
@@ -190,20 +202,26 @@ export default function CreateCasePage() {
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <FieldLabel required>Nome completo</FieldLabel>
+                <FieldLabel htmlFor="full_name" required>Nome completo</FieldLabel>
                 <Input
+                  id="full_name"
                   name="full_name"
+                  required
                   value={form.full_name}
                   onChange={handleChange}
                   placeholder="Ex.: Maria Aparecida da Silva"
                 />
+                <FieldTip>Use o nome completo como aparece nos documentos.</FieldTip>
               </div>
 
               <div>
-                <FieldLabel required>Idade</FieldLabel>
+                <FieldLabel htmlFor="age" required>Idade</FieldLabel>
                 <Input
+                  id="age"
                   name="age"
                   type="number"
+                  min="0"
+                  required
                   value={form.age}
                   onChange={handleChange}
                   placeholder="Ex.: 16"
@@ -211,19 +229,24 @@ export default function CreateCasePage() {
               </div>
 
               <div>
-                <FieldLabel required>Data do desaparecimento</FieldLabel>
+                <FieldLabel htmlFor="missing_date" required>Data do desaparecimento</FieldLabel>
                 <Input
+                  id="missing_date"
                   name="missing_date"
                   type="date"
+                  required
                   value={form.missing_date}
                   onChange={handleChange}
                 />
+                <FieldTip>Selecione no calendário a data em que a pessoa foi vista pela última vez.</FieldTip>
               </div>
 
               <div>
-                <FieldLabel required>Cidade</FieldLabel>
+                <FieldLabel htmlFor="city" required>Cidade</FieldLabel>
                 <Input
+                  id="city"
                   name="city"
+                  required
                   value={form.city}
                   onChange={handleChange}
                   placeholder="Ex.: Três Lagoas"
@@ -231,14 +254,17 @@ export default function CreateCasePage() {
               </div>
 
               <div>
-                <FieldLabel required>UF</FieldLabel>
+                <FieldLabel htmlFor="state" required>Estado (UF)</FieldLabel>
                 <Input
+                  id="state"
                   name="state"
+                  required
                   value={form.state}
                   onChange={handleChange}
                   placeholder="Ex.: MS"
                   maxLength={2}
                 />
+                <FieldTip>Informe a sigla de duas letras do estado, como MS ou SP.</FieldTip>
               </div>
             </div>
           </SectionCard>
@@ -249,8 +275,9 @@ export default function CreateCasePage() {
           >
             <div className="grid gap-4">
               <div>
-                <FieldLabel>Última roupa vista</FieldLabel>
+                <FieldLabel htmlFor="last_seen_clothes">Última roupa vista (opcional)</FieldLabel>
                 <Textarea
+                  id="last_seen_clothes"
                   name="last_seen_clothes"
                   value={form.last_seen_clothes}
                   onChange={handleChange}
@@ -260,8 +287,9 @@ export default function CreateCasePage() {
               </div>
 
               <div>
-                <FieldLabel>Características físicas</FieldLabel>
+                <FieldLabel htmlFor="physical_traits">Características físicas (opcional)</FieldLabel>
                 <Textarea
+                  id="physical_traits"
                   name="physical_traits"
                   value={form.physical_traits}
                   onChange={handleChange}
@@ -271,37 +299,37 @@ export default function CreateCasePage() {
               </div>
 
               <div>
-                <FieldLabel required>Descrição do caso</FieldLabel>
+                <FieldLabel htmlFor="case_description">Descrição do caso (opcional)</FieldLabel>
                 <Textarea
+                  id="case_description"
                   name="case_description"
                   value={form.case_description}
                   onChange={handleChange}
                   placeholder="Conte o contexto do desaparecimento, último local visto e outras informações úteis."
                   className="min-h-[140px]"
-                  minLength={20}
-                  required
                 />
+                <FieldTip>Conte apenas o que foi confirmado. Você pode deixar este campo em branco.</FieldTip>
               </div>
             </div>
           </SectionCard>
 
           <SectionCard
             title="Foto da pessoa desaparecida"
-            description="No celular, o seletor pode abrir a galeria, arquivos ou câmera, dependendo do aparelho."
+            description="Opcional. Uma foto recente e nítida ajuda outras pessoas a reconhecerem quem está sendo procurado."
           >
             <div className="grid gap-5 lg:grid-cols-[1fr_260px]">
               <div>
                 <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] p-4">
-                  <FieldLabel required>Selecionar arquivo</FieldLabel>
+                  <FieldLabel htmlFor="photo">Escolher uma foto</FieldLabel>
                   <input
+                    id="photo"
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    required
                     className="block w-full text-sm text-zinc-300 file:mr-4 file:rounded-xl file:border-0 file:bg-red-600 file:px-4 file:py-2 file:font-semibold file:text-white hover:file:bg-red-500"
                   />
                   <p className="mt-3 text-xs leading-5 text-zinc-400">
-                    Prefira uma foto nítida, frontal e recente.
+                    No celular, escolha uma imagem da galeria ou tire uma foto. Não é preciso enviar para continuar.
                   </p>
 
                   {photo && (
@@ -341,19 +369,24 @@ export default function CreateCasePage() {
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <FieldLabel required>Número do B.O.</FieldLabel>
+                <FieldLabel htmlFor="police_report_number" required>Número do boletim de ocorrência (B.O.)</FieldLabel>
                 <Input
+                  id="police_report_number"
                   name="police_report_number"
+                  required
                   value={form.police_report_number}
                   onChange={handleChange}
                   placeholder="Ex.: BO-123456"
                 />
+                <FieldTip>Esse número é informado pela autoridade policial após o registro.</FieldTip>
               </div>
 
               <div>
-                <FieldLabel required>Nome do responsável</FieldLabel>
+                <FieldLabel htmlFor="contact_name" required>Seu nome (responsável pelo cadastro)</FieldLabel>
                 <Input
+                  id="contact_name"
                   name="contact_name"
+                  required
                   value={form.contact_name}
                   onChange={handleChange}
                   placeholder="Ex.: João da Silva"
@@ -361,13 +394,17 @@ export default function CreateCasePage() {
               </div>
 
               <div>
-                <FieldLabel required>Telefone de contato</FieldLabel>
+                <FieldLabel htmlFor="contact_phone" required>Seu telefone de contato</FieldLabel>
                 <Input
+                  id="contact_phone"
                   name="contact_phone"
+                  type="tel"
+                  required
                   value={form.contact_phone}
                   onChange={handleChange}
                   placeholder="Ex.: (67) 99999-9999"
                 />
+                <FieldTip>Usaremos este número para falar com você. Ele não será exibido publicamente.</FieldTip>
               </div>
             </div>
           </SectionCard>
@@ -375,9 +412,9 @@ export default function CreateCasePage() {
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-5 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-base font-bold text-white">Enviar caso para triagem</p>
+                <p className="text-base font-bold text-white">Pronto para enviar?</p>
                 <p className="mt-1 text-sm leading-6 text-zinc-400">
-                  Casos elegíveis são publicados no site; casos sinalizados ficam em revisão.
+                  Confira os dados. Depois do envio, o caso passa por triagem antes da divulgação.
                 </p>
               </div>
 

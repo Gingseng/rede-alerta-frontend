@@ -58,8 +58,8 @@ export default function RedeAlertaHomepage() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/85 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-y-3 px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-red-600 shadow-lg shadow-red-700/30">
               <span className="text-xl font-black">!</span>
@@ -70,26 +70,28 @@ export default function RedeAlertaHomepage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <nav aria-label="Navegação principal" className="order-3 grid w-full grid-cols-2 gap-2 sm:order-none sm:flex sm:w-auto">
             <Link
               to="/guia"
-              className="hidden rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 sm:inline-flex"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 px-3 py-2 text-center text-xs font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 sm:px-4 sm:text-sm"
             >
-              Guia público
+              Como agir
             </Link>
 
             <Link
               to="/informacoes"
-              className="hidden rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 sm:inline-flex"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 px-3 py-2 text-center text-xs font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5 sm:px-4 sm:text-sm"
             >
-              Informações
+              Dicas e notícias
             </Link>
+          </nav>
 
+          <div>
             <Link
               to="/cadastrar"
-              className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold shadow-lg shadow-red-700/30 transition hover:bg-red-500"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-red-600 px-4 py-2 text-center text-xs font-bold shadow-lg shadow-red-700/30 transition hover:bg-red-500 sm:text-sm"
             >
-              Cadastrar caso
+              Preciso cadastrar um caso
             </Link>
           </div>
         </div>
@@ -156,7 +158,7 @@ export default function RedeAlertaHomepage() {
                   to="/guia"
                   className="rounded-2xl border border-red-500/30 bg-red-500/10 px-6 py-3 text-center text-sm font-semibold text-red-200 transition hover:border-red-400/40 hover:bg-red-500/15"
                 >
-                  Saiba como agir
+                  Ver passo a passo
                 </Link>
 
                 <Link
@@ -164,6 +166,21 @@ export default function RedeAlertaHomepage() {
                   className="rounded-2xl border border-white/15 px-6 py-3 text-center text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/5"
                 >
                   Ver Rede Informa
+                </Link>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="font-bold text-white">Está em dúvida sobre o que fazer?</p>
+                  <p className="mt-1 text-sm leading-6 text-zinc-300">
+                    Veja orientações simples, organizadas por etapas.
+                  </p>
+                </div>
+                <Link
+                  to="/guia"
+                  className="inline-flex min-h-11 items-center justify-center rounded-xl border border-emerald-300/30 px-4 py-2 text-center text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300/10"
+                >
+                  Abrir guia
                 </Link>
               </div>
 
@@ -560,13 +577,8 @@ export default function RedeAlertaHomepage() {
                       "Caso aprovado para divulgação pública e compartilhamento responsável."}
                   </p>
 
-                  <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-green-600 px-4 py-3 text-center text-sm font-semibold text-white">
-                      Tenho uma informação sobre este caso
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white">
-                      Compartilhar caso
-                    </div>
+                  <div className="mt-5 rounded-xl bg-red-600 px-4 py-3 text-center text-sm font-bold text-white">
+                    Abrir caso para ver detalhes e enviar uma informação
                   </div>
                 </div>
               </Link>
