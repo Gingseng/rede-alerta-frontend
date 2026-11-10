@@ -184,7 +184,7 @@ export default function RedeAlertaHomepage() {
                 </Link>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4">
                 {[
                   ["24h", "atenção para casos urgentes"],
                   ["Gratuito", "cadastro aberto à população"],
@@ -193,12 +193,12 @@ export default function RedeAlertaHomepage() {
                 ].map(([value, label]) => (
                   <div
                     key={value}
-                    className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-white/10 bg-white/5 p-4"
+                    className="flex min-h-[124px] min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-white/5 p-4 sm:min-h-[136px]"
                   >
-                    <div className="break-words text-[1.75rem] font-black leading-[1.05] tracking-tight text-white">
+                    <div className="text-lg font-black leading-tight text-white sm:text-xl lg:text-2xl">
                       {value}
                     </div>
-                    <div className="mt-3 text-xs leading-6 text-zinc-400">
+                    <div className="mt-3 text-xs leading-5 text-zinc-400">
                       {label}
                     </div>
                   </div>
